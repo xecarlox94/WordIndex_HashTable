@@ -2,7 +2,7 @@ package F28DA_CW1;
 
 import java.util.Iterator;
 
-public class HashWordMap implements IWordMap {
+public class HashWordMap implements IWordMap, IHashMonitor {
 	
 	public HashWordMap(float f) {}
 
@@ -45,6 +45,24 @@ public class HashWordMap implements IWordMap {
 	public float averNumProbes() {
 		// TODO Auto-generated method stub
 		return 0f;
+	}
+
+	@Override
+	public float getMaxLoadFactor() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getLoadFactor() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int hashCode(String s) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }
