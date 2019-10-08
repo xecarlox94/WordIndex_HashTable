@@ -100,6 +100,7 @@ public class ListWordMap implements IWordMap
 			// check if temporary string matches with given word string
 			if(tempString.equals(word))
 			{
+				// adding word to temporary position list
 				tempPositionList.add(tempWord);
 			}
 		}
