@@ -13,20 +13,16 @@ public class ListWordMap implements IWordMap
 	{
 		// Instantiates a new word entry
 		WordPosition wp = new WordPosition(pos.getFileName(), pos.getLine(), word);
-		
-		// tests if the linked list already contains this element
-		if (!list.contains(wp))
-		{
-			// adds a new element to the linked list
-			list.add(wp);
-		}
+
+		// adds a new element to the linked list
+		list.add(wp);
 	}
 
 	@Override
 	public void removeWord(String word) throws WordException
 	{
 		// checks if any word was removed from the map
-		boolean wasAnyWordRemoved = false;
+		boolean wasWordRemoved = false;
 		
 		// loops through the linked list
 		for(int i = 0; i < list.size(); i++)
@@ -39,11 +35,12 @@ public class ListWordMap implements IWordMap
 			{
 				// removes the index element matching the condition
 				list.remove(i);
-				wasAnyWordRemoved = true;
+				wasWordRemoved = true;
 			}
 		}
+		
 		// if no word was removed, then the word exception error is thrown stating that no entry was removed
-		if(!wasAnyWordRemoved) throw new WordException("No word position entry was removed");
+		if(!wasWordRemoved) throw new WordException("No word position entry was removed");
 	}
 
 	@Override
@@ -78,7 +75,7 @@ public class ListWordMap implements IWordMap
 			// tests if the temporary string word linked list already contains the temporary string
 			if(!tempWordList.contains(tempString))
 			{
-				// adding the strin if the temporary words list does not contain the temporary string yet
+				// adding the string if the temporary words list does not contain the temporary string yet
 				tempWordList.add(tempString);
 			}
 		}
@@ -95,9 +92,19 @@ public class ListWordMap implements IWordMap
 		// loops through the linked list
 		for(int i = 0; i < list.size(); i++)
 		{
+			// store current list element temporary variable
+			// store its string in a variable
+			WordPosition tempWord = list.get(i);
+			String tempString = tempWord.getWord();
 			
+			// check if temporary string matches with given word string
+			if(tempString.equals(word))
+			{
+				tempPositionList.add(tempWord);
+			}
 		}
 		
+		//returns temporary position iterator containing word positions that match the word
 		return tempPositionList.iterator();
 	}
 
