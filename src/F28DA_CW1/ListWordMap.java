@@ -8,6 +8,7 @@ public class ListWordMap implements IWordMap
 	// Java linked list which will store the word position data
 	private LinkedList<WordPosition> list = new LinkedList<WordPosition>();
 
+	
 	@Override
 	public void addPos(String word, IPosition pos)
 	{

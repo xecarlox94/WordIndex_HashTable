@@ -31,7 +31,10 @@ public class WordIndex {
 
 			// initialise map
 			IWordMap wordPossMap;
+			
 			// ...
+			// Linked List implementation of the word map
+			wordPossMap = new ListWordMap();
 
 			// reading the content of the command file
 			while(commandReader.hasNextWord()) {
@@ -50,6 +53,12 @@ public class WordIndex {
 							WordPosition wordPos = wordReader.nextWord();
 							// adding word to the map
 							// ...
+							
+							// casting word position variable into IPosition
+							IPosition pos = (IPosition) wordPos;
+							
+							// adding word position to word position map
+							wordPossMap.addPos(wordPos.getWord(), pos);
 						}
 					}
 					break;
@@ -61,6 +70,12 @@ public class WordIndex {
 						WordPosition word = wordReader.nextWord();
 						// adding word to the map
 						// ...
+						
+						// casting word position variable into IPosition
+						IPosition pos = (IPosition) word;
+						
+						// adding word position to word position map
+						wordPossMap.addPos(word.getWord(), pos);
 					}
 					break;
 
