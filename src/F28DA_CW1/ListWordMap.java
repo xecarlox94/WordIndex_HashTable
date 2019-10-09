@@ -6,7 +6,7 @@ import java.util.LinkedList;
 public class ListWordMap implements IWordMap
 {
 	// Java linked list which will store the word position data
-	private LinkedList<WordPosition> list = new LinkedList<WordPosition>();
+	private LinkedList<WordEntry> list = new LinkedList<WordEntry>();
 
 	
 	@Override
