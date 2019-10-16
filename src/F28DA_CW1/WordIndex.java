@@ -27,7 +27,9 @@ public class WordIndex {
 			}
 
 			// creating a command reader from a file
+			System.out.println("Working!!");
 			WordTxtReader commandReader = new WordTxtReader(commandFile);
+			
 
 			// initialise map
 			IWordMap wordPossMap;
@@ -117,6 +119,7 @@ public class WordIndex {
 
 		}
 		catch (IOException e){ // catch exceptions caused by file input/output errors
+			System.out.println(e);
 			System.err.println("Check your file name");
 			System.exit(1);
 		}  

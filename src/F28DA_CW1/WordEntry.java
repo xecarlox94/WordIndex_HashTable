@@ -15,6 +15,7 @@ public class WordEntry implements Entry<String, ArrayList<IPosition>> {
 	// Constructor
 	public WordEntry(String word) {
 		this.word = word;
+		this.positions = new ArrayList<IPosition>();
 	}
 	
 	// Constructor overload
