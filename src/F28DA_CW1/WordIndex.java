@@ -27,16 +27,15 @@ public class WordIndex {
 			}
 
 			// creating a command reader from a file
-			System.out.println("Working!!");
 			WordTxtReader commandReader = new WordTxtReader(commandFile);
 			
 
 			// initialise map
 			IWordMap wordPossMap;
-			
-			// ...
 			// Linked List implementation of the word map
 			wordPossMap = new ListWordMap();
+			
+			
 
 			// reading the content of the command file
 			while(commandReader.hasNextWord()) {
@@ -53,14 +52,16 @@ public class WordIndex {
 
 						while (wordReader.hasNextWord()) {
 							WordPosition wordPos = wordReader.nextWord();
-							// adding word to the map
-							// ...
 							
+							
+							// adding word to the map
 							// casting word position variable into IPosition
 							IPosition pos = (IPosition) wordPos;
 							
 							// adding word position to word position map
 							wordPossMap.addPos(wordPos.getWord(), pos);
+							
+							
 						}
 					}
 					break;
@@ -70,14 +71,16 @@ public class WordIndex {
 					WordTxtReader wordReader = new WordTxtReader(textFile);
 					while (wordReader.hasNextWord()) {
 						WordPosition word = wordReader.nextWord();
-						// adding word to the map
-						// ...
 						
+						
+						// adding word to the map
 						// casting word position variable into IPosition
 						IPosition pos = (IPosition) word;
 						
 						// adding word position to word position map
 						wordPossMap.addPos(word.getWord(), pos);
+						
+						
 					}
 					break;
 
@@ -90,7 +93,8 @@ public class WordIndex {
 						Iterator<IPosition> poss = wordPossMap.positions(word);
 						int i = 0;
 						while(poss.hasNext()) {
-							poss.next();
+							IPosition position = poss.next();
+							System.out.println("Filename: " + position.getFileName() + ",		line: " + position.getLine() );
 							i++;
 						}
 						System.out.println("found \"" + word + "\"(" + i + ")");
