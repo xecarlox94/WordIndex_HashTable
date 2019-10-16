@@ -1,2 +1,2 @@
-add L05
-search 3 function
+addall
+search 3 algorithms

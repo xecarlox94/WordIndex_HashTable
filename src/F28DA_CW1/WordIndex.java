@@ -85,19 +85,58 @@ public class WordIndex {
 					break;
 
 				case "search":
+					
+					// Initialises new word position per file (Helper Function) to hold a specific position per each file
+					WPositionsFile[] wordPositionsFile = getWPositionFileArray();
+					
 					int nb = Integer.parseInt(commandReader.nextWord().getWord());
 					String word = commandReader.nextWord().getWord();
+
+					
 					// search for word entry in map
 					// ...
 					try {
 						Iterator<IPosition> poss = wordPossMap.positions(word);
 						int i = 0;
 						while(poss.hasNext()) {
-							IPosition position = poss.next();
-							System.out.println("Filename: " + position.getFileName() + ",		line: " + position.getLine() );
+							
+							// increments the number of existing word positions
 							i++;
+							
+							// stores a temporary word position variable
+							IPosition tempPosition = poss.next();
+							
+
+							
+							// loops through the word position per file array
+							for(int k = 0; k < wordPositionsFile.length; k++)
+							{
+								// wposition file name lower case string
+								String wordPosFilename = wordPositionsFile[k].getFileName().toLowerCase();
+								
+
+
+								
+								// tests if the word position file name is equal to the position file name
+								if( wordPosFilename.equals(tempPosition.getFileName().toLowerCase()) )
+								{
+									
+									// adds the current position to the respective file
+									wordPositionsFile[k].addPosition(tempPosition);
+									
+
+									System.out.println(tempPosition.getFileName());
+									
+									// breaks the inner for loop once the position was added to file
+									break;
+								}
+							}
+							
 						}
-						System.out.println("found \"" + word + "\"(" + i + ")");
+						
+						// function that prints the results of the search, by taking the word positions per file and its amount
+						printSearchResults(wordPositionsFile, i, nb);
+						
 					} catch (WordException e) {
 						System.err.println("not found");
 					}
@@ -123,9 +162,54 @@ public class WordIndex {
 
 		}
 		catch (IOException e){ // catch exceptions caused by file input/output errors
-			System.out.println(e);
+			System.err.println(e);
 			System.err.println("Check your file name");
 			System.exit(1);
 		}  
 	}
+	
+	
+	// gets the word positions per file, sorts it and prints the amount of files specified and the word positions lines
+	private static void printSearchResults(WPositionsFile[] wordPositionsFile, int amountPositions, int numberFilesToPrint)
+	{
+		System.out.println("Before sorting");
+		for(int i = 0; i < wordPositionsFile.length; i++) {
+			System.out.println( "File: " + wordPositionsFile[i].getFileName() + ",		word entries: " + wordPositionsFile[i].getAmountPositions() );
+		}
+		Arrays.sort(wordPositionsFile, new ComparatorSortByPositionsAmount());
+		
+
+		System.out.println("After sorting");
+		for(int i = 0; i < wordPositionsFile.length; i++) {
+			System.out.println( "File: " + wordPositionsFile[i].getFileName() + ",		word entries: " + wordPositionsFile[i].getAmountPositions() );
+		}
+	}
+
+
+	// returns an word positions per file array
+	private static WPositionsFile[] getWPositionFileArray()
+	{
+		// gets a file list inside the directory
+		File[] filesList = textFilesFolder.listFiles(txtFilenameFilter);
+		
+		// Initialises a word 
+		WPositionsFile[] temp = new WPositionsFile[filesList.length];
+		
+		//loops through the temp array
+		for(int j = 0; j < temp.length; j++)
+		{
+			// Stores filename string
+			String sTemp = filesList[j].getName();
+			
+			// Initialises a new word position file
+			temp[j] = new WPositionsFile(sTemp);
+			
+		}
+		
+		// returns a new word position array
+		return temp;
+	}
+	
+	
+	
 }
