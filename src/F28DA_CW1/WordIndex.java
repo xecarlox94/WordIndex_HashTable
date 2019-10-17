@@ -189,6 +189,14 @@ public class WordIndex {
 					// print overview
 					// ...
 					// Question
+					~
+					
+					//	Overview:
+						//	number of words: 1304
+						//	number of positions: 954
+						//	number of files: 20
+						
+					
 					break;
 
 				default:
