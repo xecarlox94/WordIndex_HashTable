@@ -171,13 +171,11 @@ public class WordIndex {
 							
 							
 							
+						} catch (WordException e) {
+
+							
 							// increments removed word counter
 							removedWordCounter++;
-							
-						} catch (WordException e) {
-							
-							// logging the word exception error on the screen
-							System.err.println(e);
 						}
 						
 						
