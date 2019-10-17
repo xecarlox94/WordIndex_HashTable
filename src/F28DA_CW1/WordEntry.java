@@ -73,6 +73,7 @@ public class WordEntry implements Entry<String, ArrayList<IPosition>> {
 		return this.positions.remove(pos);
 	}
 	
+	// returns an iterator composed of word positions
 	public Iterator<IPosition> getPositionIterator()
 	{
 		// return null if the array list is empty
@@ -80,6 +81,18 @@ public class WordEntry implements Entry<String, ArrayList<IPosition>> {
 		
 		// return the iterator if the array list has elements
 		return this.positions.iterator();
+	}
+	
+	// returns the amount of word positions in a word entry
+	public int getAmountWordPositions()
+	{
+		return this.positions.size();
+	}
+	
+	// returns if the positions array list is empty
+	public boolean isWordPositionsEmpty()
+	{
+		return this.positions.isEmpty();
 	}
 
 }

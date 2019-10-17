@@ -144,14 +144,53 @@ public class WordIndex {
 					break;
 
 				case "remove":
-					File textFileToRemove = new File(textFilesFolder, commandReader.nextWord().getWord()+".txt");
-					// remove word-positions
-					// ...
+					
+					// loads the file to be removed
+					File textFileToRemove = new File(textFilesFolder, commandReader.nextWord().getWord().toUpperCase()+".txt");
+					
+					// Initialises the file reader
+					WordTxtReader wrdReader = new WordTxtReader(textFileToRemove);
+					
+					// Initialises a removed words counter
+					int removedWordCounter = 0;
+
+					// reads the whole text file by looping under the condition of having a next word
+					while (wrdReader.hasNextWord()) {
+						
+						// Stores the word in a temporary variable
+						WordPosition tempWordPos = wrdReader.nextWord();
+						
+						// casting word position variable into IPosition
+						IPosition pos = (IPosition) tempWordPos;
+						
+						// catch any error during the position removal
+						try {
+							
+							// removing word from word map
+							wordPossMap.removePos(tempWordPos.getWord(), pos);
+							
+							
+							
+							// increments removed word counter
+							removedWordCounter++;
+							
+						} catch (WordException e) {
+							
+							// logging the word exception error on the screen
+							System.err.println(e);
+						}
+						
+						
+					}
+					
+					System.out.println(removedWordCounter + " word positions removed");
+
 					break;
 
 				case "overview":
 					// print overview
 					// ...
+					// Question
 					break;
 
 				default:
