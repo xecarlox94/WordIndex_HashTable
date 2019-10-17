@@ -171,6 +171,7 @@ public class ListWordMap implements IWordMap
 			// check if the word entry key string is equal to the string given
 			if( temp.equals(word) )
 			{
+				// it returns the word entry
 				return this.list.get(i);
 			}
 		}

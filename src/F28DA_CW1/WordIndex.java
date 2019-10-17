@@ -189,7 +189,6 @@ public class WordIndex {
 					// print overview
 					// ...
 					// Question
-					~
 					
 					//	Overview:
 						//	number of words: 1304
