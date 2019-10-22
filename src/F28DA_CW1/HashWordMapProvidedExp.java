@@ -9,6 +9,8 @@ public class HashWordMapProvidedExp {
 	/** Runs the hash table at different load factors and print out the average probe numbers versus the running time.
 	 * The average probe number should go up as the max load factor goes up.
 	 */
+	
+	/*
 	private static void runDifferentLoadFactors() {
 		System.out.println("Runs the hash table at different load factors and print out the average probe numbers versus the running time.");
 		System.out.println("The average probe number should go up as the max load factor goes up.");
@@ -49,6 +51,43 @@ public class HashWordMapProvidedExp {
 				System.out.print("Failure");
 			}
 		}
+	}
+	*/
+	
+
+	private static void runDifferentLoadFactors() {
+		
+		String word;
+		int line;
+		String file;
+		WordPosition pos;
+		
+		HashWordMap h = new HashWordMap(0.5f);			
+		try{
+			for (int k = 0; k < 12; ++k) {
+				word = "w" + k;
+				line = k + 1;
+				file = "f" + k;
+				pos = new WordPosition(file, line, word);
+				h.addPos(word, pos);
+			}
+			
+			for ( int k = 0; k < 12; ++k ){
+				word = "w" + k;
+				line = k + 1;
+				file = "f" + k;
+				pos = new WordPosition(file, line, word);
+				h.removePos(word, pos);
+			}
+		}
+		catch (WordException e) {
+			System.out.print(e);
+		}
+
+		
+		
+		System.out.println("Finished");
+		
 	}
 
 }
