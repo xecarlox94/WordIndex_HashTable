@@ -73,6 +73,7 @@ public class HashWordMapProvidedExp {
 				h.addPos(word, pos);
 			}
 
+			/*
 			WordPosition tpos = new WordPosition("new file", 1000, "w9");
 			
 			h.addPos(tpos.getWord(), tpos);
@@ -82,27 +83,12 @@ public class HashWordMapProvidedExp {
 			for(int i = 0; i < we.getValue().size(); i++)
 			{
 				System.out.println(we.getValue().get(i).getLine());
-			}
+			}*/
 			
 			h.printWholeTable();
 
-			h.removePos(tpos.getWord(), tpos);
 			
-
-			System.out.println("After removing position");
 			
-			for(int i = 0; i < we.getValue().size(); i++)
-			{
-				System.out.println(we.getValue().get(i).getLine());
-			}
-
-			h.removeWord("w5");
-			h.removeWord("w0");
-			
-			System.out.println("After word entry removal");
-			h.printWholeTable();
-			
-			/*
 			for ( int k = 0; k < 12; ++k ){
 				word = "w" + k;
 				line = k + 1;
@@ -113,12 +99,6 @@ public class HashWordMapProvidedExp {
 			
 
 			h.printWholeTable();
-			
-			
-			for(int i = 0; i < h.getWordEntry(tpos.getWord()).getValue().size(); i++)
-			{
-				System.out.println(we.getValue().get(i).getLine());
-			}*/
 			
 		}
 		catch (WordException e) {

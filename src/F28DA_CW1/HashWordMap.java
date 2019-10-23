@@ -18,9 +18,15 @@ public class HashWordMap implements IWordMap, IHashMonitor
 				System.out.println("i: " + i + " null");
 			}
 			
+			this.isEmptyDelete();
 		}
 	}
 	
+	// DELETE METHOD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	private void isEmptyDelete()
+	{
+		System.out.println("is empty? " + this.isEmpty() );
+	}
 
 	// DELETE METHOD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	public WordEntry getWordEntry(String s)
@@ -137,6 +143,9 @@ public class HashWordMap implements IWordMap, IHashMonitor
 			{
 				// remove the word entry entirely
 				this.table[index] = null;;
+				
+				// decrease word entry counter
+				this.wordEntryCounter--;
 			}
 		}
 		
@@ -145,10 +154,13 @@ public class HashWordMap implements IWordMap, IHashMonitor
 	// adds a word entry to the hash table
 	private void addWordEntry(String word, IPosition pos)
 	{
+		
+		
 		// if hash table over load factor, resize table
 		if( this.isOverLoadFactor() )
 		{
-			// resize table with same elements
+			// resize table with same elements, before adding the current position
+			this.resizeTable();
 		}
 		
 		// assign initial hashcode
@@ -162,19 +174,6 @@ public class HashWordMap implements IWordMap, IHashMonitor
 		
 		while ( !wasWordEntryAdded )
 		{
-			/*
-			if ( index == ( this.hashCode(word) % this.table.length ) )
-			{
-				// if value of index is equal to the word hash code, it means that all elements were searched
-				// return null to inform that there is no entry
-				// but more importantly, to avoid a infinite loop
-				
-				System.out.println("Word already inside");
-				
-				// throw Error or just return
-				return;
-			}
-			*/
 			
 			// if table array is not available or it is not an entry already
 			if( this.table[index] != null )
@@ -219,10 +218,6 @@ public class HashWordMap implements IWordMap, IHashMonitor
 	{
 		// Stores the hashcode into a index variable
 		int index = this.hashCode(word);
-		
-
-		
-		
 		
 
 		// modulus of index to keep the index within the the table array bounds
@@ -303,7 +298,9 @@ public class HashWordMap implements IWordMap, IHashMonitor
 	public float getLoadFactor()
 	{
 		// returns the current table load factor
-		return ( this.numberOfEntries() / this.table.length );
+		float tableLength = (float) this.table.length;
+		float numberEntries = (float) this.numberOfEntries();
+		return ( numberEntries / tableLength );
 	}
 
 	@Override
@@ -400,9 +397,27 @@ public class HashWordMap implements IWordMap, IHashMonitor
 	
 	private boolean isOverLoadFactor()
 	{
+		// checks if the load factor is above the maximum specified in the constructor
 		return ( this.maxLoadFactor <= this.getLoadFactor() );
 	}
 	
+	private boolean isEmpty()
+	{
+		// it checks if table is empty
+		return ( this.numberOfEntries() == 0);
+	}
+	
+	
+	// resizing function when the load factor goes over the maximum load factor
+	private void resizeTable()
+	{
+		System.out.println("Resizing table");
+		/*
+		WordEntry[] currentWordEntryArray
+		int newTableLength = 
+		WordEntry[] newWordEntry = new WordEntry[this.]
+		*/
+	}
 	
 	
 }
