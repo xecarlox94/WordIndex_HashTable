@@ -411,7 +411,12 @@ public class HashWordMap implements IWordMap, IHashMonitor
 	// resizing function when the load factor goes over the maximum load factor
 	private void resizeTable()
 	{
-		System.out.println("Resizing table");
+		WordEntry[] tempArray = new WordEntry[this.numberOfEntries()];
+		
+		while( !this.isEmpty() )
+		{
+			
+		}
 		/*
 		WordEntry[] currentWordEntryArray
 		int newTableLength = 
