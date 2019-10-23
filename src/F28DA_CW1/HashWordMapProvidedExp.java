@@ -56,6 +56,7 @@ public class HashWordMapProvidedExp {
 	
 
 	private static void runDifferentLoadFactors() {
+
 		
 		String word;
 		int line;
@@ -71,7 +72,37 @@ public class HashWordMapProvidedExp {
 				pos = new WordPosition(file, line, word);
 				h.addPos(word, pos);
 			}
+
+			WordPosition tpos = new WordPosition("new file", 1000, "w9");
 			
+			h.addPos(tpos.getWord(), tpos);
+			
+			WordEntry we = h.getWordEntry(tpos.getWord());
+			
+			for(int i = 0; i < we.getValue().size(); i++)
+			{
+				System.out.println(we.getValue().get(i).getLine());
+			}
+			
+			h.printWholeTable();
+
+			h.removePos(tpos.getWord(), tpos);
+			
+
+			System.out.println("After removing position");
+			
+			for(int i = 0; i < we.getValue().size(); i++)
+			{
+				System.out.println(we.getValue().get(i).getLine());
+			}
+
+			h.removeWord("w5");
+			h.removeWord("w0");
+			
+			System.out.println("After word entry removal");
+			h.printWholeTable();
+			
+			/*
 			for ( int k = 0; k < 12; ++k ){
 				word = "w" + k;
 				line = k + 1;
@@ -79,9 +110,19 @@ public class HashWordMapProvidedExp {
 				pos = new WordPosition(file, line, word);
 				h.removePos(word, pos);
 			}
+			
+
+			h.printWholeTable();
+			
+			
+			for(int i = 0; i < h.getWordEntry(tpos.getWord()).getValue().size(); i++)
+			{
+				System.out.println(we.getValue().get(i).getLine());
+			}*/
+			
 		}
 		catch (WordException e) {
-			System.out.print(e);
+			System.err.println(e);
 		}
 
 		

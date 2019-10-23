@@ -4,6 +4,34 @@ import java.util.Iterator;
 
 public class HashWordMap implements IWordMap, IHashMonitor 
 {
+	
+	// DELETE METHOD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	public void printWholeTable() {
+		for(int i = 0; i< this.table.length; i++)
+		{
+			if( this.table[i] != null)
+			{
+				System.out.println("i: " + i + ", key: " + this.table[i].getKey() + ", positions: " + this.table[i].getPositionIterator());
+			}
+			else 
+			{
+				System.out.println("i: " + i + " null");
+			}
+			
+		}
+	}
+	
+
+	// DELETE METHOD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	public WordEntry getWordEntry(String s)
+	{
+		return this.table[this.getWordEntryIndex(s)];
+	}
+	
+	
+	
+	
+	
 	// word entry array hash table
 	private WordEntry[] table;
 	
@@ -23,7 +51,7 @@ public class HashWordMap implements IWordMap, IHashMonitor
 	public HashWordMap()
 	{
 		// Assigning default float value of 0.5
-		this((float) 0.5);
+		this( 0.5f);
 	}
 	
 	// Main Constructor 
@@ -46,21 +74,197 @@ public class HashWordMap implements IWordMap, IHashMonitor
 	}
 
 	@Override
-	public void addPos(String word, IPosition pos) {
-		// TODO Auto-generated method stub
+	public void addPos(String word, IPosition pos)
+	{
+		// gets word entry index
+		int index = this.getWordEntryIndex(word);
+		
+		if( index == -1)
+		{
+			// if no word entry with this key was found
+			// add a new word entry, along with its first position
+			this.addWordEntry(word, pos);
+			
+			
+		} else
+		{
+			// if word entry was found, add a position to its value
+			this.table[index].addPosition(pos);
+		}
 
+	}
+	
+
+
+	@Override
+	public void removeWord(String word) throws WordException
+	{
+		int index = this.getWordEntryIndex(word);
+		
+		// if not found
+		if( index == -1 )
+		{
+			// trow word exception saying that no word entry was found
+			throw new WordException("No word entry found");
+			
+		} else {
+			// Empty the index table meant to remove word entry
+			this.table[index] = null;
+			
+			// decrease word counter
+			this.wordEntryCounter--;
+		}
 	}
 
 	@Override
-	public void removeWord(String word) throws WordException {
-		// TODO Auto-generated method stub
-
+	public void removePos(String word, IPosition pos) throws WordException 
+	{
+		// gets word entry index
+		int index = this.getWordEntryIndex(word);
+		
+		// if no word entry was found
+		if(index == -1) {
+			// throw a word exception saying there is no word entry with this key
+			throw new WordException("No word entry found");
+			
+		} else 
+		{
+			// it removes the position from the entry
+			this.table[index].removePosition(pos);
+			
+			// if there is no positions left in the IPosition array list
+			if( this.table[index].getValue().isEmpty() )
+			{
+				// remove the word entry entirely
+				this.table[index] = null;;
+			}
+		}
+		
 	}
+	
+	// adds a word entry to the hash table
+	private void addWordEntry(String word, IPosition pos)
+	{
+		// if hash table over load factor, resize table
+		if( this.isOverLoadFactor() )
+		{
+			// resize table with same elements
+		}
+		
+		// assign initial hashcode
+		int index = this.hashCode(word);
 
-	@Override
-	public void removePos(String word, IPosition pos) throws WordException {
-		// TODO Auto-generated method stub
+		
+		index = index % this.table.length;
+		
+		// checks if index is available
+		boolean wasWordEntryAdded = false;
+		
+		while ( !wasWordEntryAdded )
+		{
+			/*
+			if ( index == ( this.hashCode(word) % this.table.length ) )
+			{
+				// if value of index is equal to the word hash code, it means that all elements were searched
+				// return null to inform that there is no entry
+				// but more importantly, to avoid a infinite loop
+				
+				System.out.println("Word already inside");
+				
+				// throw Error or just return
+				return;
+			}
+			*/
+			
+			// if table array is not available or it is not an entry already
+			if( this.table[index] != null )
+			{
+				// if the word entry was not found increment using double hash
+				index = index + this.hashFunction2(word);
 
+				// modulus of index to keep the index within the the bounds
+				index = index % this.table.length;
+				
+			} else
+			{
+				// if the the table index is empty
+				WordEntry we;
+				
+				if(pos == null) {
+					// if position is null
+					we = new WordEntry(word);
+				} else {
+					// if pos is given
+					we = new WordEntry(word, pos);
+				}
+				
+				// word entry is added to the table
+				this.table[index] = we;
+				
+				// word entry counter is incremented by one 
+				this.wordEntryCounter++;
+				
+				// while loop execution is stopped
+				wasWordEntryAdded = true;
+			}
+			
+		}
+		
+		
+	}
+	
+	
+	// gets the word entry index from hash table
+	private int getWordEntryIndex(String word)
+	{
+		// Stores the hashcode into a index variable
+		int index = this.hashCode(word);
+		
+
+		
+		
+		
+
+		// modulus of index to keep the index within the the table array bounds
+		index = index % this.table.length;
+		
+		if( ( this.table[index] != null ) && ( this.table[index].getKey().equals(word) ) )
+		{
+			return index;
+		}
+
+		// word entry was not found
+		boolean wasWordEntryFound = false;
+
+		while ( !wasWordEntryFound )
+		{
+			
+			
+			// if the word entry was not found increment using double hash
+			index = index + this.hashFunction2(word);
+
+			// modulus of index to keep the index within the the table array bounds
+			index = index % this.table.length;
+			
+			// if index table is not empty and the key matches with the word
+			if( (this.table[index] != null) && ( this.table[index].getKey().equals(word) ))
+			{
+				// then the word entry was found
+				wasWordEntryFound = true;
+			}
+			
+			// if value of index is equal to the module of word hash code by the table length
+			// it means that all elements were searched
+			if( index == ( this.hashCode(word) % this.table.length ) )
+			{
+				// return -1 to inform that there is no entry in the array
+				// but more importantly, to avoid a infinite loop
+				return -1;
+			}
+			
+		}
+		
+		return index;
 	}
 
 	@Override
@@ -129,44 +333,6 @@ public class HashWordMap implements IWordMap, IHashMonitor
 		
 		// returning the polynomial accumulator
 		return polynomialAccumulator;
-	}
-	
-	
-	
-	// adds a word entry to the hash table
-	private void addWordEntry(String word)
-	{
-		// if hash table over load factor, resize table
-	}
-	
-	
-	// gets a word entry from hash table
-	private WordEntry getWordEntry(String word)
-	{
-		// Stores the hashcode into a index variable
-		int index = this.hashCode(word);
-		
-		// if the table index element is equal to word
-		while ( !this.table[index].getKey().equals(word) )
-		{
-			// if the word entry was not found increment using double hash
-			index = index + this.hashFunction2(word);
-			
-			
-			// modulus of index to keep the index within the the bounds
-			index = index % this.table.length;
-			
-			
-			// if value of index is equal to the word hash code, it means that all elements were searched
-			// return null to inform that there is no entry
-			// but more importantly, to avoid a infinite loop
-			if( index == this.hashCode(word))
-			{
-				return null;
-			}
-		}
-		
-		return this.table[index];
 	}
 	
 	

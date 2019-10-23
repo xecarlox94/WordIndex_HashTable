@@ -12,6 +12,7 @@ public class ListWordMap implements IWordMap
 	@Override
 	public void addPos(String word, IPosition pos)
 	{
+		System.out.println("Running");
 		// checks if entry was found
 		boolean entryFound = false;
 		
