@@ -413,6 +413,7 @@ public class HashWordMap implements IWordMap, IHashMonitor
 	{
 		WordEntry[] tempArray = new WordEntry[this.numberOfEntries()];
 		
+		/*
 		while( !this.isEmpty() )
 		{
 			
