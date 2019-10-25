@@ -27,6 +27,20 @@ public class WordEntry implements Entry<String, ArrayList<IPosition>> {
 		// add first position
 		this.positions.add(pos);
 	}
+	
+	// Constructor overload
+	public WordEntry(String word, IPosition[] posArray)
+	{
+		// uses the main constructor
+		this(word);
+		
+		// loops through the IPosition given array
+		for(int i = 0; i < posArray.length; i++)
+		{
+			// it adds each positions to the array list
+			this.addPosition(posArray[i]);
+		}
+	}
 
 	@Override
 	public String getKey()

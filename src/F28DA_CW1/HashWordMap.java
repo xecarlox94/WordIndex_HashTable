@@ -1,6 +1,7 @@
 package F28DA_CW1;
 
 import java.util.Iterator;
+import java.util.LinkedList;
 
 public class HashWordMap implements IWordMap, IHashMonitor 
 {
@@ -87,9 +88,11 @@ public class HashWordMap implements IWordMap, IHashMonitor
 		
 		if( index == -1)
 		{
+			IPosition[] posArray = { pos };
+			
 			// if no word entry with this key was found
 			// add a new word entry, along with its first position
-			this.addWordEntry(word, pos);
+			this.addWordEntry(word, posArray);
 			
 			
 		} else
@@ -152,64 +155,79 @@ public class HashWordMap implements IWordMap, IHashMonitor
 	}
 	
 	// adds a word entry to the hash table
-	private void addWordEntry(String word, IPosition pos)
+	private void addWordEntry(String word, IPosition[] posArray)
 	{
 		
-		
-		// if hash table over load factor, resize table
-		if( this.isOverLoadFactor() )
-		{
-			// resize table with same elements, before adding the current position
-			this.resizeTable();
-		}
-		
-		// assign initial hashcode
-		int index = this.hashCode(word);
+		try {
 
-		
-		index = index % this.table.length;
-		
-		// checks if index is available
-		boolean wasWordEntryAdded = false;
-		
-		while ( !wasWordEntryAdded )
-		{
-			
-			// if table array is not available or it is not an entry already
-			if( this.table[index] != null )
+			// if hash table over load factor, resize table
+			if( this.isOverLoadFactor() )
 			{
-				// if the word entry was not found increment using double hash
-				index = index + this.hashFunction2(word);
-
-				// modulus of index to keep the index within the the bounds
-				index = index % this.table.length;
-				
-			} else
-			{
-				// if the the table index is empty
-				WordEntry we;
-				
-				if(pos == null) {
-					// if position is null
-					we = new WordEntry(word);
-				} else {
-					// if pos is given
-					we = new WordEntry(word, pos);
-				}
-				
-				// word entry is added to the table
-				this.table[index] = we;
-				
-				// word entry counter is incremented by one 
-				this.wordEntryCounter++;
-				
-				// while loop execution is stopped
-				wasWordEntryAdded = true;
+				// resize table with same elements, before adding the current position
+				this.resizeTable();
 			}
 			
+			// assign initial hashcode
+			int index = this.hashCode(word);
+
+			// make sure the index does not go out of bounds
+			index = index % this.table.length;
+			
+			// checks if index is available
+			boolean wasWordEntryAdded = false;
+			
+			while ( !wasWordEntryAdded )
+			{
+				
+				// if table array is not available or it is not an entry already
+				if( this.table[index] != null )
+				{
+					// if the word entry was not found increment using double hash
+					index = index + this.hashFunction2(word);
+
+					// modulus of index to keep the index within the the bounds
+					index = index % this.table.length;
+					
+				} else
+				{
+					// if the the table index is empty
+					WordEntry we;
+					
+					if(posArray == null) {
+						// if position is null
+						we = new WordEntry(word);
+					} else {
+						// if pos is given
+						we = new WordEntry(word, posArray);
+					}
+					
+					// word entry is added to the table
+					this.table[index] = we;
+					
+					// word entry counter is incremented by one 
+					this.wordEntryCounter++;
+					
+					// while loop execution is stopped
+					wasWordEntryAdded = true;
+				}
+				
+			}
+			
+		} catch (WordException e)
+		{
+			System.err.println("Fatal: Hash table map could not resize properly");
 		}
 		
 		
+		
+	}
+
+	
+	// overloaded add word entry function
+	private void addWordEntry(WordEntry we) 
+	{
+		IPosition[] tempIPositions = (IPosition[]) we.getValue().toArray();
+		this.addWordEntry(we.getKey(), tempIPositions);
 	}
 	
 	
@@ -409,20 +427,58 @@ public class HashWordMap implements IWordMap, IHashMonitor
 	
 	
 	// resizing function when the load factor goes over the maximum load factor
-	private void resizeTable()
+	private void resizeTable() throws WordException
 	{
-		WordEntry[] tempArray = new WordEntry[this.numberOfEntries()];
+		// temporary linked list to store all the entries, temporarily
+		LinkedList<WordEntry> tempList = new LinkedList<WordEntry>();
 		
-		/*
-		while( !this.isEmpty() )
+		for(int i = 0; i < this.table.length; i++)
 		{
-			
+			if(this.table[i] != null)
+			{
+				
+				tempList.add(this.table[i]);
+				this.removeWordEntry(i);
+			}
 		}
-		/*
-		WordEntry[] currentWordEntryArray
-		int newTableLength = 
-		WordEntry[] newWordEntry = new WordEntry[this.]
-		*/
+		
+		// if current table is not empty, throw an error
+		if( !this.isEmpty() )
+		{
+			throw new WordException("Current table was not emptied current while resizing");
+		}
+
+		// gets the the double the size of the current hash table
+		int doubleCurrentTableLength = this.table.length * 2;
+		
+		// it determines the new hash table length which needs to be a prime number
+		// if the number is already prime it will keep it otherwise it will use the next prime
+		int newTableLength = this.getNextPrimeNumber(doubleCurrentTableLength);
+		
+		// it sets the new double hashing prime number
+		// it will return the next smaller prime number to the double the current table size
+		this.prime2 = this.getPreviousPrimeNumber(doubleCurrentTableLength);
+		
+		
+		// create a new word index array
+		this.table = new WordEntry[newTableLength];
+		
+		// add all existing word entries to the new resized table
+		while( !templist.isEmpty() )
+		{
+			WordEntry we = templist
+			this.addWordEntry(word, pos);
+		}
+
+	}
+	
+	private void removeWordEntry(int index)
+	{
+		// this removes a word entry from the array
+		this.table[index] = null;
+		
+		// it decreases the word counter
+		this.wordEntryCounter--;
 	}
 	
 	
