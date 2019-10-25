@@ -1,43 +1,11 @@
 package F28DA_CW1;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
 public class HashWordMap implements IWordMap, IHashMonitor 
-{
-	
-	// DELETE METHOD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	public void printWholeTable() {
-		for(int i = 0; i< this.table.length; i++)
-		{
-			if( this.table[i] != null)
-			{
-				System.out.println("i: " + i + ", key: " + this.table[i].getKey() + ", positions: " + this.table[i].getPositionIterator());
-			}
-			else 
-			{
-				System.out.println("i: " + i + " null");
-			}
-			
-			this.isEmptyDelete();
-		}
-	}
-	
-	// DELETE METHOD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	private void isEmptyDelete()
-	{
-		System.out.println("is empty? " + this.isEmpty() );
-	}
-
-	// DELETE METHOD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	public WordEntry getWordEntry(String s)
-	{
-		return this.table[this.getWordEntryIndex(s)];
-	}
-	
-	
-	
-	
+{	
 	
 	// word entry array hash table
 	private WordEntry[] table;
@@ -54,6 +22,9 @@ public class HashWordMap implements IWordMap, IHashMonitor
 	// probes counter
 	private int probesCounter;
 	
+	// operations counter
+	private int operationsCounter;
+	
 	// Constructor overloading
 	public HashWordMap()
 	{
@@ -64,6 +35,11 @@ public class HashWordMap implements IWordMap, IHashMonitor
 	// Main Constructor 
 	public HashWordMap(float f)
 	{
+		// set operations and probes counters to 0
+		this.probesCounter = 0;
+		this.operationsCounter = 0;
+		
+		
 		// initial table length
 		int initialTableLength = 13;
 		
@@ -114,7 +90,7 @@ public class HashWordMap implements IWordMap, IHashMonitor
 		// if not found
 		if( index == -1 )
 		{
-			// trow word exception saying that no word entry was found
+			// throw word exception saying that no word entry was found
 			throw new WordException("No word entry found");
 			
 		} else {
@@ -174,7 +150,7 @@ public class HashWordMap implements IWordMap, IHashMonitor
 
 			// modulus of hash code by table length
 			// to keep the index within the the table array bounds
-			int index = hashCode % this.table.length;
+			int index = hashFunction(wordEntry.getKey());
 			
 			// checks if index is available
 			boolean wasWordEntryAdded = false;
@@ -191,6 +167,9 @@ public class HashWordMap implements IWordMap, IHashMonitor
 					// modulus of index to keep the index within the the bounds
 					index = index % this.table.length;
 					
+					// increment number of probes
+					this.probesCounter++;
+					
 				} else
 				{
 					
@@ -200,6 +179,9 @@ public class HashWordMap implements IWordMap, IHashMonitor
 					
 					// word entry counter is incremented by one 
 					this.wordEntryCounter++;
+					
+					// increment number operations
+					this.operationsCounter++;
 					
 					// while loop execution is stopped
 					wasWordEntryAdded = true;
@@ -218,17 +200,6 @@ public class HashWordMap implements IWordMap, IHashMonitor
 		
 		
 	}
-
-	
-	// overloaded add word entry function
-//	private void addWordEntry(WordEntry we) 
-//	{
-//		// cast value to IPosition array 
-//		IPosition[] tempIPositions = (IPosition[]) we.getValue().toArray();
-//		
-//		// Overloading the function
-//		this.addWordEntry(we.getKey(), tempIPositions);
-//	}
 	
 	
 	// gets the word entry index from hash table
@@ -239,7 +210,7 @@ public class HashWordMap implements IWordMap, IHashMonitor
 
 		// modulus of hash code by table length
 		// to keep the index within the the table array bounds
-		int index = hashCode % this.table.length;
+		int index = hashFunction(word);
 		
 		if( ( this.table[index] != null ) && ( this.table[index].getKey().equals(word) ) )
 		{
@@ -259,6 +230,9 @@ public class HashWordMap implements IWordMap, IHashMonitor
 			// modulus of index to keep the index within the the table array bounds
 			index = index % this.table.length;
 			
+			// increment number of probes
+			this.probesCounter++;
+			
 			// if index table is not empty and the key matches with the word
 			if( (this.table[index] != null) && ( this.table[index].getKey().equals(word) ))
 			{
@@ -270,6 +244,10 @@ public class HashWordMap implements IWordMap, IHashMonitor
 			// it means that all elements were searched
 			if( index == ( hashCode % this.table.length ) )
 			{
+				// increment number operations
+				this.operationsCounter++;
+				
+				
 				// return -1 to inform that there is no entry in the array
 				// but more importantly, to avoid a infinite loop
 				return -1;
@@ -277,19 +255,57 @@ public class HashWordMap implements IWordMap, IHashMonitor
 			
 		}
 		
+		// increment number operations
+		this.operationsCounter++;
+		
 		return index;
 	}
 
 	@Override
-	public Iterator<String> words() {
-		// TODO Auto-generated method stub
-		return null;
+	public Iterator<String> words()
+	{
+		// creates a new string linked list
+		LinkedList<String> tempWordList = new LinkedList<String>();
+		
+		// loops through the entire hash table
+		for(int k = 0; k < this.table.length; k++)
+		{
+			// if table index holds a value
+			if(this.table[k] != null)
+			{
+				// stores the key string in the string linked list
+				tempWordList.add(this.table[k].getKey());
+			}
+		}
+		
+		// it returns a string iterator
+		return tempWordList.iterator();
+		
 	}
 
 	@Override
-	public Iterator<IPosition> positions(String word) throws WordException {
-		// TODO Auto-generated method stub
-		return null;
+	public Iterator<IPosition> positions(String word) throws WordException 
+	{
+		// gets the index matching the key
+		int index = this.getWordEntryIndex(word);
+		
+		// if not found
+		if( index == -1 )
+		{
+			// throw word exception saying that no word entry was found
+			throw new WordException("No word entry found");
+			
+		} else {
+			// if index is valid
+			// store the entry
+			WordEntry wordEntry = this.table[index];
+			
+			// store the IPosition array list values
+			ArrayList<IPosition> arrListPos = wordEntry.getValue();
+			
+			// return an iterator
+			return arrListPos.iterator();
+		}
 	}
 
 	@Override
@@ -300,9 +316,12 @@ public class HashWordMap implements IWordMap, IHashMonitor
 	}
 
 	@Override
-	public float averNumProbes() {
-		// TODO Auto-generated method stub
-		return 0f;
+	public float averNumProbes()
+	{
+		// casting the probes count to float and store it in a temporary variable
+		float tempProbes = (float) this.probesCounter;
+		float tempOperations = (float) this.operationsCounter;
+		return ( tempProbes / tempOperations );
 	}
 
 	@Override
@@ -401,7 +420,7 @@ public class HashWordMap implements IWordMap, IHashMonitor
 		
 		while( i < integer)
 		{
-			// if a number is divisable by any number other than itself or 1
+			// if a number is divisible by any number other than itself or 1
 			// the number is a prime number
 			if( integer % i == 0) return false;
 			
