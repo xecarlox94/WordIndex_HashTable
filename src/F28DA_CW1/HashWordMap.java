@@ -52,7 +52,7 @@ public class HashWordMap implements IWordMap, IHashMonitor
 	private int prime2;
 	
 	// probes counter
-	// private int probesCounter;
+	private int probesCounter;
 	
 	// Constructor overloading
 	public HashWordMap()
@@ -88,11 +88,12 @@ public class HashWordMap implements IWordMap, IHashMonitor
 		
 		if( index == -1)
 		{
-			IPosition[] posArray = { pos };
+			// new word entry object
+			WordEntry wordEntry = new WordEntry(word, pos);
 			
 			// if no word entry with this key was found
 			// add a new word entry, along with its first position
-			this.addWordEntry(word, posArray);
+			this.addWordEntry(wordEntry);
 			
 			
 		} else
@@ -155,9 +156,9 @@ public class HashWordMap implements IWordMap, IHashMonitor
 	}
 	
 	// adds a word entry to the hash table
-	private void addWordEntry(String word, IPosition[] posArray)
+	private void addWordEntry(WordEntry wordEntry)
 	{
-		
+		// will catch any error resultant from adding a new word entry
 		try {
 
 			// if hash table over load factor, resize table
@@ -166,12 +167,14 @@ public class HashWordMap implements IWordMap, IHashMonitor
 				// resize table with same elements, before adding the current position
 				this.resizeTable();
 			}
-			
-			// assign initial hashcode
-			int index = this.hashCode(word);
 
-			// make sure the index does not go out of bounds
-			index = index % this.table.length;
+			// stores this value to improve performance
+			int hashCode = this.hashCode(wordEntry.getKey());
+
+
+			// modulus of hash code by table length
+			// to keep the index within the the table array bounds
+			int index = hashCode % this.table.length;
 			
 			// checks if index is available
 			boolean wasWordEntryAdded = false;
@@ -183,26 +186,17 @@ public class HashWordMap implements IWordMap, IHashMonitor
 				if( this.table[index] != null )
 				{
 					// if the word entry was not found increment using double hash
-					index = index + this.hashFunction2(word);
+					index = index + this.hashFunction2(wordEntry.getKey());
 
 					// modulus of index to keep the index within the the bounds
 					index = index % this.table.length;
 					
 				} else
 				{
-					// if the the table index is empty
-					WordEntry we;
 					
-					if(posArray == null) {
-						// if position is null
-						we = new WordEntry(word);
-					} else {
-						// if pos is given
-						we = new WordEntry(word, posArray);
-					}
 					
 					// word entry is added to the table
-					this.table[index] = we;
+					this.table[index] = wordEntry;
 					
 					// word entry counter is incremented by one 
 					this.wordEntryCounter++;
@@ -211,11 +205,14 @@ public class HashWordMap implements IWordMap, IHashMonitor
 					wasWordEntryAdded = true;
 				}
 				
+
+				
 			}
 			
 		} catch (WordException e)
 		{
-			System.err.println("Fatal: Hash table map could not resize properly");
+			// catches the error and stops the adding word entry process
+			System.err.println(e);
 		}
 		
 		
@@ -224,22 +221,25 @@ public class HashWordMap implements IWordMap, IHashMonitor
 
 	
 	// overloaded add word entry function
-	private void addWordEntry(WordEntry we) 
-	{
-		IPosition[] tempIPositions = (IPosition[]) we.getValue().toArray();
-		this.addWordEntry(we.getKey(), tempIPositions);
-	}
+//	private void addWordEntry(WordEntry we) 
+//	{
+//		// cast value to IPosition array 
+//		IPosition[] tempIPositions = (IPosition[]) we.getValue().toArray();
+//		
+//		// Overloading the function
+//		this.addWordEntry(we.getKey(), tempIPositions);
+//	}
 	
 	
 	// gets the word entry index from hash table
 	private int getWordEntryIndex(String word)
 	{
-		// Stores the hashcode into a index variable
-		int index = this.hashCode(word);
-		
+		// stores this value to improve performance
+		int hashCode = this.hashCode(word);
 
-		// modulus of index to keep the index within the the table array bounds
-		index = index % this.table.length;
+		// modulus of hash code by table length
+		// to keep the index within the the table array bounds
+		int index = hashCode % this.table.length;
 		
 		if( ( this.table[index] != null ) && ( this.table[index].getKey().equals(word) ) )
 		{
@@ -268,7 +268,7 @@ public class HashWordMap implements IWordMap, IHashMonitor
 			
 			// if value of index is equal to the module of word hash code by the table length
 			// it means that all elements were searched
-			if( index == ( this.hashCode(word) % this.table.length ) )
+			if( index == ( hashCode % this.table.length ) )
 			{
 				// return -1 to inform that there is no entry in the array
 				// but more importantly, to avoid a infinite loop
@@ -436,8 +436,10 @@ public class HashWordMap implements IWordMap, IHashMonitor
 		{
 			if(this.table[i] != null)
 			{
-				
+				// add to the temporary list
 				tempList.add(this.table[i]);
+				
+				// remove word from hash table
 				this.removeWordEntry(i);
 			}
 		}
@@ -445,7 +447,7 @@ public class HashWordMap implements IWordMap, IHashMonitor
 		// if current table is not empty, throw an error
 		if( !this.isEmpty() )
 		{
-			throw new WordException("Current table was not emptied current while resizing");
+			throw new WordException("Fatal: Hash table map could not resize properly");
 		}
 
 		// gets the the double the size of the current hash table
@@ -464,10 +466,19 @@ public class HashWordMap implements IWordMap, IHashMonitor
 		this.table = new WordEntry[newTableLength];
 		
 		// add all existing word entries to the new resized table
-		while( !templist.isEmpty() )
+		while( !tempList.isEmpty() )
 		{
-			WordEntry we = templist
-			this.addWordEntry(word, pos);
+			// removes each word entry
+			WordEntry wordEntry = tempList.remove();
+			
+			
+			// only add word entries that hold values
+			if( !wordEntry.getValue().isEmpty() )
+			{
+				
+				// add to new hash table
+				this.addWordEntry(wordEntry);
+			}
 		}
 
 	}
