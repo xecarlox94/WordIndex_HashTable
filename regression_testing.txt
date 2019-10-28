@@ -1,0 +1,6 @@
+tests to do:
+
+
+
+- if string hashcode is over is over the integer over the integer.max value, 
+returns the module of int.max_value

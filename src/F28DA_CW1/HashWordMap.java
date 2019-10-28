@@ -420,6 +420,8 @@ public class HashWordMap implements IWordMap, IHashMonitor
 
 			// adding each character accumulator to the accumulator			
 			polynomialAccumulator += polynomial;
+
+
 			
 		}
 		

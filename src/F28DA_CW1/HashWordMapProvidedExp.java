@@ -70,6 +70,16 @@ public class HashWordMapProvidedExp {
 				h.addPos(word, pos);
 			}
 			
+			System.out.println(h.hashCode("algorithms"));
+			
+			System.out.println("max value" + Integer.MAX_VALUE);
+			
+			int intOverMax = (Integer.MAX_VALUE + 1);
+			System.out.println("max plus one" + intOverMax );
+			
+
+			System.out.println("max plus times (-1) " + (intOverMax * (-1) ) );
+			
 //			for ( int k = 0; k < 10000; ++k ){
 //				word = "w" + k;
 //				line = k + 1;
@@ -80,7 +90,7 @@ public class HashWordMapProvidedExp {
 			
 			
 			
-			h.printHashTable();
+			//h.printHashTable();
 			
 			System.out.println("FINISHED");
 			
