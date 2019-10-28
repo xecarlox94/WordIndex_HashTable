@@ -258,10 +258,13 @@ public class HashWordMap implements IWordMap, IHashMonitor
 	{
 		// stores the initial index value to improve performance
 		int initialIndex = this.hashFunction(word);
+		
+		
 
 		// modulus of hash code by table length
 		// to keep the index within the the table array bounds
 		int index = initialIndex;
+		
 		
 		if( ( this.table[index] != null ) && ( this.table[index].getKey().equals(word) ) )
 		{
@@ -396,6 +399,8 @@ public class HashWordMap implements IWordMap, IHashMonitor
 	{
 		// It returns the polynomial accumulation to determine the string hash code
 		
+		System.out.println("STRING: " + s);
+		
 		// it accumulates the polynomial of each string character
 		int polynomialAccumulator = 0;
 		for(int i = 0; i < s.length() ; i++)
@@ -406,7 +411,9 @@ public class HashWordMap implements IWordMap, IHashMonitor
 			
 			// return a polynomial equal to the power (length - i - 1) of a prime number 33
 			// 33 is the next prime number after 31 (used in the Java language to create hash code)
-			int polynomial = (int) Math.pow(33, (s.length() - i - 1) );
+			int polynomial = (int) Math.pow(31, (s.length() - i - 1) );
+			
+			System.out.println("character: " + c + ",           is polinomial: " + polynomial);
 			
 			// multiplying the power of 33 by the character ASCII code
 			polynomial *= (int) c;
@@ -416,6 +423,10 @@ public class HashWordMap implements IWordMap, IHashMonitor
 			
 		}
 		
+		System.out.println(s.hashCode());
+		
+		System.out.println("polinomial accumulator for " + s + " is --------------------> " + polynomialAccumulator);
+		
 		// returning the polynomial accumulator
 		return polynomialAccumulator;
 	}
@@ -423,7 +434,7 @@ public class HashWordMap implements IWordMap, IHashMonitor
 	
 	// compression function, which compresses entries in the hash table
 	private int hashFunction(String word)
-	{
+	{		
 		// it is equal to the modulus of the string hash code and the table length
 		return ( this.hashCode(word) % this.table.length );
 	}

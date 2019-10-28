@@ -33,7 +33,9 @@ public class WordIndex {
 			// initialise map
 			IWordMap wordPossMap;
 			// Linked List implementation of the word map
-			wordPossMap = new ListWordMap();
+			//wordPossMap = new ListWordMap();
+			
+			wordPossMap = new HashWordMap(0.5f);
 			
 			
 
