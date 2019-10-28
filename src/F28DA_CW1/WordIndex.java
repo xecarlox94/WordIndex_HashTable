@@ -153,21 +153,41 @@ public class WordIndex {
 					break;
 
 				case "add":
-					File textFile = new File(textFilesFolder, commandReader.nextWord().getWord()+".txt");
+					
+					String tempFileName = commandReader.nextWord().getWord()+".txt";
+					File textFile = new File(textFilesFolder, tempFileName );
 					WordTxtReader wordReader = new WordTxtReader(textFile);
+					
+					// word entries added
+					int wordEntriesAddedCounter = 0;
+					
 					while (wordReader.hasNextWord()) {
-						WordPosition word = wordReader.nextWord();
+						WordPosition wordPosition = wordReader.nextWord();
 						
 						
 						// adding word to the map
 						// casting word position variable into IPosition
-						IPosition pos = (IPosition) word;
+						IPosition pos = (IPosition) wordPosition;
+						
+						try 
+						{
+							// gets word position from a word entry
+							wordPossMap.positions(wordPosition.getWord());
+							
+						} catch (WordException e) 
+						{
+							// it catches word exception reporting 
+							// that there is no word entry with this string and increases the counter
+							wordEntriesAddedCounter++;
+						}
+						
 						
 						// adding word position to word position map
-						wordPossMap.addPos(word.getWord(), pos);
-						
-						
+						wordPossMap.addPos(wordPosition.getWord(), pos);
 					}
+					
+					System.out.println( wordEntriesAddedCounter + " entries have been indexed from file \"" + tempFileName + "\"");
+					
 					break;
 
 				case "search":
