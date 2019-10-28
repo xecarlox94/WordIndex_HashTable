@@ -80,6 +80,16 @@ public class WordEntry implements Entry<String, ArrayList<IPosition>> {
 		if(!posFound) this.positions.add(pos);
 	}
 	
+	// it overloads the add position function to add an array list of positions
+	public void addPosition(ArrayList<IPosition> posArray)
+	{
+		// adds each position in the array list
+		for(int k = 0; k < posArray.size(); k++)
+		{
+			this.addPosition(posArray.get(k));
+		}
+	}
+	
 	// removes a position from the word entry's positions array list  
 	public boolean removePosition(IPosition pos)
 	{

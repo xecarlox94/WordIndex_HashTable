@@ -7,6 +7,18 @@ import java.util.LinkedList;
 public class HashWordMap implements IWordMap, IHashMonitor 
 {	
 	
+	// DELETE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	public void printHashTable() {
+		for(int k = 0; k < this.table.length; k++) {
+			if(this.table[k] != null) {
+				System.out.println("Index: " + k + ", 		word entry: " + this.table[k].getKey());
+				System.out.println("Elements amount: " + this.table[k].getValue().size() );
+			} else {
+				System.out.println("Index: " + k + ", 		word entry: NULL -> EMPTY");
+			}
+		}
+	}
+	
 	// word entry array hash table
 	private WordEntry[] table;
 	
@@ -29,7 +41,7 @@ public class HashWordMap implements IWordMap, IHashMonitor
 	public HashWordMap()
 	{
 		// Assigning default float value of 0.5
-		this( 0.5f);
+		this( 0.5f );
 	}
 	
 	// Main Constructor 
@@ -80,8 +92,7 @@ public class HashWordMap implements IWordMap, IHashMonitor
 
 	}
 	
-
-
+	
 	@Override
 	public void removeWord(String word) throws WordException
 	{
@@ -143,24 +154,55 @@ public class HashWordMap implements IWordMap, IHashMonitor
 				// resize table with same elements, before adding the current position
 				this.resizeTable();
 			}
-
-			// stores this value to improve performance
-			int hashCode = this.hashCode(wordEntry.getKey());
-
-
-			// modulus of hash code by table length
-			// to keep the index within the the table array bounds
-			int index = hashFunction(wordEntry.getKey());
 			
-			// checks if index is available
-			boolean wasWordEntryAdded = false;
+			// stores the initial index to improve performance
+			int initialIndex = this.hashFunction(wordEntry.getKey());
+
+
+			// it initialises the index variable to keep the current table index
+			int index = initialIndex;
 			
-			while ( !wasWordEntryAdded )
+			// loop counter, it is necessary to check if all indexes were searched
+			int counter = 0;
+			
+			while (true)
 			{
 				
-				// if table array is not available or it is not an entry already
-				if( this.table[index] != null )
+				// if the table index is null
+				boolean isIndexNull = this.table[index] == null;
+				
+				// if the table index entry is the same as the given word entry
+				boolean isSameEntry = false;
+				
+				// if all indexes were searched
+				boolean hasProbedAllIndexes = (initialIndex == index) && (counter != 0);
+				
+				// increment loop counter by one
+				counter++;
+				
+				// break the loop if the table was completely probed
+				if(hasProbedAllIndexes)
 				{
+					// stop the loop
+					break;
+				}
+				
+				// if the index has a entry
+				if(!isIndexNull)
+				{
+					// check if the given entry is the same as the index entry
+					isSameEntry = this.table[index].getKey().equals(wordEntry.getKey());
+				}
+				
+				// it should probe if the index is not null and it is not the same entry
+				boolean shouldProbe = !isIndexNull && !isSameEntry ;
+				
+				// if table array is not available or it is not an entry already
+				//
+				if( shouldProbe )
+				{
+					System.out.println("Probbing: ");
+					
 					// if the word entry was not found increment using double hash
 					index = index + this.hashFunction2(wordEntry.getKey());
 
@@ -170,8 +212,20 @@ public class HashWordMap implements IWordMap, IHashMonitor
 					// increment number of probes
 					this.probesCounter++;
 					
-				} else
+				} else if( isSameEntry )
 				{
+					// in this case add the missing word positions values in the existent index entry
+					
+					// store the given entry array list of positions
+					ArrayList<IPosition> posArraylist = wordEntry.getValue();
+					
+					// add the missing positions to this entry
+					this.table[index].addPosition(posArraylist);
+					
+					// stop the while loop after adding the positions
+					break;
+					
+				} else {
 					
 					
 					// word entry is added to the table
@@ -184,10 +238,9 @@ public class HashWordMap implements IWordMap, IHashMonitor
 					this.operationsCounter++;
 					
 					// while loop execution is stopped
-					wasWordEntryAdded = true;
+					break;
+					
 				}
-				
-
 				
 			}
 			
@@ -197,20 +250,18 @@ public class HashWordMap implements IWordMap, IHashMonitor
 			System.err.println(e);
 		}
 		
-		
-		
 	}
 	
 	
 	// gets the word entry index from hash table
 	private int getWordEntryIndex(String word)
 	{
-		// stores this value to improve performance
-		int hashCode = this.hashCode(word);
+		// stores the initial index value to improve performance
+		int initialIndex = this.hashFunction(word);
 
 		// modulus of hash code by table length
 		// to keep the index within the the table array bounds
-		int index = hashFunction(word);
+		int index = initialIndex;
 		
 		if( ( this.table[index] != null ) && ( this.table[index].getKey().equals(word) ) )
 		{
@@ -240,9 +291,9 @@ public class HashWordMap implements IWordMap, IHashMonitor
 				wasWordEntryFound = true;
 			}
 			
-			// if value of index is equal to the module of word hash code by the table length
+			// if value of index is equal to the initial index value
 			// it means that all elements were searched
-			if( index == ( hashCode % this.table.length ) )
+			if( index == initialIndex )
 			{
 				// increment number operations
 				this.operationsCounter++;
@@ -374,7 +425,7 @@ public class HashWordMap implements IWordMap, IHashMonitor
 	private int hashFunction(String word)
 	{
 		// it is equal to the modulus of the string hash code and the table length
-		return ( hashCode(word) % this.table.length );
+		return ( this.hashCode(word) % this.table.length );
 	}
 	
 	// double hashing function that probes during the hash table operations
