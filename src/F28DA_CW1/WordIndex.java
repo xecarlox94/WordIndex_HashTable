@@ -6,6 +6,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 /** Main class for the Word Index program */
 public class WordIndex {
@@ -35,7 +36,7 @@ public class WordIndex {
 			// Linked List implementation of the word map
 			//wordPossMap = new ListWordMap();
 			
-			wordPossMap = new HashWordMap(0.5f);
+			wordPossMap = new HashWordMap();
 			
 			
 
@@ -66,6 +67,89 @@ public class WordIndex {
 							
 						}
 					}
+					
+					// Iterator holding word keys
+					Iterator<String> wordEntryKeys = wordPossMap.words();
+					
+					// list holding unique file names
+					LinkedList<String> filesNames = new LinkedList<String>();
+					
+					int wordEntryCounter = 0;
+					
+					// iterates through the Iterator
+					while( wordEntryKeys.hasNext() )
+					{
+						// increments the word entry counter
+						wordEntryCounter++;
+						
+						// stores the string 
+						String word = wordEntryKeys.next();
+
+						try
+						{
+							// gets the positions iterator for each word entry
+							Iterator<IPosition> positions = wordPossMap.positions(word);
+							
+							// while there is still positions in this iterator, iterate
+							while( positions.hasNext() )
+							{
+								// removes a position from the iterator
+								// and stores it in a variable
+								IPosition position = positions.next();
+								
+
+								// stores the word position's file name
+								String posfname = position.getFileName();
+								
+								
+								boolean isPositionFileNameSaved = false;
+								
+								// iterates through the files names linked list
+								// to add new unique file names to it
+								for(int k = 0; k < filesNames.size(); k++)
+								{
+									// stores the current linked list filename string
+									String fname = filesNames.get(k);
+									
+									
+									// if the current linked list file name is equal
+									// to the 
+									if ( fname.equals(posfname) )
+									{
+										// file name is already included in the linked list
+										isPositionFileNameSaved = true;
+										
+										// stops the for loop
+										break;
+									}
+									
+								}
+								
+								// if the file name is not included
+								if( !isPositionFileNameSaved )
+								{
+									// add file name to files names linked list
+									filesNames.add(posfname);
+								}
+								
+							}
+							
+							
+							
+						} catch (WordException e) {
+							// prints the error message
+							// it prevents the execution of an empty positions iterator
+							System.err.println( word + " word entry has no positions.");
+							
+							// decreases the word counter by one, if word has no positions
+							wordEntryCounter--;
+						}
+						
+					}
+					
+					
+					System.out.println(wordEntryCounter + " entries have been indexed from " + filesNames.size() + " files");
+					
 					break;
 
 				case "add":
