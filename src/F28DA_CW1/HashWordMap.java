@@ -5,19 +5,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 public class HashWordMap implements IWordMap, IHashMonitor 
-{	
-	
-	// DELETE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	public void printHashTable() {
-		for(int k = 0; k < this.table.length; k++) {
-			if(this.table[k] != null) {
-				System.out.println("Index: " + k + ", 		word entry: " + this.table[k].getKey());
-				System.out.println("Elements amount: " + this.table[k].getValue().size() );
-			} else {
-				System.out.println("Index: " + k + ", 		word entry: NULL -> EMPTY");
-			}
-		}
-	}
+{
 	
 	// word entry array hash table
 	private WordEntry[] table;
