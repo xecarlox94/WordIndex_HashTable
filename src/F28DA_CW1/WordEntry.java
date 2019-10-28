@@ -29,16 +29,16 @@ public class WordEntry implements Entry<String, ArrayList<IPosition>> {
 	}
 	
 	// Constructor overload
-	public WordEntry(String word, IPosition[] posArray)
+	public WordEntry(String word, ArrayList<IPosition> posArrayList)
 	{
 		// uses the main constructor
 		this(word);
 		
 		// loops through the IPosition given array
-		for(int i = 0; i < posArray.length; i++)
+		for(int i = 0; i < posArrayList.size(); i++)
 		{
 			// it adds each positions to the array list
-			this.addPosition(posArray[i]);
+			this.addPosition(posArrayList.get(i));
 		}
 	}
 

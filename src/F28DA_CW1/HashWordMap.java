@@ -84,6 +84,7 @@ public class HashWordMap implements IWordMap, IHashMonitor
 	@Override
 	public void removeWord(String word) throws WordException
 	{
+		// gets word entry index
 		int index = this.getWordEntryIndex(word);
 		
 		// if not found
@@ -185,8 +186,8 @@ public class HashWordMap implements IWordMap, IHashMonitor
 				// it should probe if the index is not null and it is not the same entry
 				boolean shouldProbe = !isIndexNull && !isSameEntry ;
 				
+				
 				// if table array is not available or it is not an entry already
-				//
 				if( shouldProbe )
 				{
 					

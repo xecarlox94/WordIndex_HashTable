@@ -10,117 +10,48 @@ public class HashWordMapProvidedExp {
 	 * The average probe number should go up as the max load factor goes up.
 	 */
 	
-//	private static void runDifferentLoadFactors() {
-//		System.out.println("Runs the hash table at different load factors and print out the average probe numbers versus the running time.");
-//		System.out.println("The average probe number should go up as the max load factor goes up.");
-//
-//		float maxLF = 0.5f;
-//		HashWordMap h = new HashWordMap(maxLF);
-//		long startTime,finishTime;
-//		double time;
-//		String word;
-//		int line;
-//		String file;
-//		WordPosition pos;
-//
-//		while (maxLF < 0.99 ){
-//			startTime = System.currentTimeMillis();
-//			h = new HashWordMap(maxLF);			
-//			try{
-//				for (int k = 0; k < 10000; ++k) {
-//					word = "w" + k;
-//					line = k + 1;
-//					file = "f" + k;
-//					pos = new WordPosition(file, line, word);
-//					h.addPos(word, pos);
-//				}
-//				for ( int k = 0; k < 10000; ++k ){
-//					word = "w" + k;
-//					line = k + 1;
-//					file = "f" + k;
-//					pos = new WordPosition(file, line, word);
-//					h.removePos(word, pos);
-//				}
-//				finishTime = System.currentTimeMillis();
-//				time = finishTime - startTime;
-//				System.out.println(String.format("For load factor %9f, average num. of  probes is %9f time in milseconds is %9f",maxLF,h.averNumProbes(),time));
-//				maxLF = maxLF+ (float) 0.05;
-//			}
-//			catch (WordException e) {
-//				System.out.print("Failure");
-//			}
-//		}
-//	}
-	
 	private static void runDifferentLoadFactors() {
+		System.out.println("Runs the hash table at different load factors and print out the average probe numbers versus the running time.");
+		System.out.println("The average probe number should go up as the max load factor goes up.");
 
-		HashWordMap h = new HashWordMap(1f);
+		float maxLF = 0.5f;
+		HashWordMap h = new HashWordMap(maxLF);
+		long startTime,finishTime;
+		double time;
 		String word;
 		int line;
 		String file;
 		WordPosition pos;
-		
-		try{
-			
-			for (int k = 0; k < 13; ++k) {
-				word = "w" + k;
-				line = k + 1;
-				file = "f" + k;
-				pos = new WordPosition(file, line, word);
-				h.addPos(word, pos);
+
+		while (maxLF < 0.99 ){
+			startTime = System.currentTimeMillis();
+			h = new HashWordMap(maxLF);			
+			try{
+				for (int k = 0; k < 10000; ++k) {
+					word = "w" + k;
+					line = k + 1;
+					file = "f" + k;
+					pos = new WordPosition(file, line, word);
+					h.addPos(word, pos);
+				}
+				for ( int k = 0; k < 10000; ++k ){
+					word = "w" + k;
+					line = k + 1;
+					file = "f" + k;
+					pos = new WordPosition(file, line, word);
+					h.removePos(word, pos);
+				}
+				finishTime = System.currentTimeMillis();
+				time = finishTime - startTime;
+				System.out.println(String.format("For load factor %9f, average num. of  probes is %9f time in milseconds is %9f",maxLF,h.averNumProbes(),time));
+				maxLF = maxLF+ (float) 0.05;
 			}
-			
-			//System.out.println();
-
-			System.out.println("max value " + Integer.MAX_VALUE);
-			System.out.println("min value " + Integer.MIN_VALUE + "\n\n\n");
-
-
-			int largeInt = h.hashCode("algorithmsdesdgergeqegwgewgegwewgew");
-			
-			//largeInt = (Integer.MAX_VALUE + 100);
-			
-			//System.out.println("Large number: " + largeInt);
-			
-			if(largeInt < 0)
-			{
-				largeInt = largeInt - Integer.MIN_VALUE;
+			catch (WordException e) {
+				System.out.print("Failure");
 			}
-			
-
-			System.out.println("Final large number: " + largeInt);
-			
-			
-			
-//			if ( intOverMax >= 0) {
-//				
-//			} else {
-//				intOverMax %= Integer.MIN_VALUE;
-//				
-//				System.out.println(intOverMax);
-//			}
-			
-//			for ( int k = 0; k < 10000; ++k ){
-//				word = "w" + k;
-//				line = k + 1;
-//				file = "f" + k;
-//				pos = new WordPosition(file, line, word);
-//				h.removePos(word, pos);
-//			}
-			
-			
-			
-			//h.printHashTable();
-			
-			System.out.println("FINISHED");
-			
 		}
-		catch (Exception e) {
-			System.out.print(e);
-		}
-		
-		
 	}
+
 	
 
 }
