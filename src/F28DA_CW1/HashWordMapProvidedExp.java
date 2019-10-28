@@ -70,15 +70,35 @@ public class HashWordMapProvidedExp {
 				h.addPos(word, pos);
 			}
 			
-			System.out.println(h.hashCode("algorithms"));
+			//System.out.println();
+
+			System.out.println("max value " + Integer.MAX_VALUE);
+			System.out.println("min value " + Integer.MIN_VALUE + "\n\n\n");
+
+
+			int largeInt = h.hashCode("algorithmsdesdgergeqegwgewgegwewgew");
 			
-			System.out.println("max value" + Integer.MAX_VALUE);
+			//largeInt = (Integer.MAX_VALUE + 100);
 			
-			int intOverMax = (Integer.MAX_VALUE + 1);
-			System.out.println("max plus one" + intOverMax );
+			//System.out.println("Large number: " + largeInt);
+			
+			if(largeInt < 0)
+			{
+				largeInt = largeInt - Integer.MIN_VALUE;
+			}
 			
 
-			System.out.println("max plus times (-1) " + (intOverMax * (-1) ) );
+			System.out.println("Final large number: " + largeInt);
+			
+			
+			
+//			if ( intOverMax >= 0) {
+//				
+//			} else {
+//				intOverMax %= Integer.MIN_VALUE;
+//				
+//				System.out.println(intOverMax);
+//			}
 			
 //			for ( int k = 0; k < 10000; ++k ){
 //				word = "w" + k;

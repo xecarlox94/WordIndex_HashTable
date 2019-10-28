@@ -201,7 +201,6 @@ public class HashWordMap implements IWordMap, IHashMonitor
 				//
 				if( shouldProbe )
 				{
-					System.out.println("Probbing: ");
 					
 					// if the word entry was not found increment using double hash
 					index = index + this.hashFunction2(wordEntry.getKey());
@@ -399,7 +398,7 @@ public class HashWordMap implements IWordMap, IHashMonitor
 	{
 		// It returns the polynomial accumulation to determine the string hash code
 		
-		System.out.println("STRING: " + s);
+		//System.out.println("STRING: " + s);
 		
 		// it accumulates the polynomial of each string character
 		int polynomialAccumulator = 0;
@@ -413,7 +412,7 @@ public class HashWordMap implements IWordMap, IHashMonitor
 			// 33 is the next prime number after 31 (used in the Java language to create hash code)
 			int polynomial = (int) Math.pow(31, (s.length() - i - 1) );
 			
-			System.out.println("character: " + c + ",           is polinomial: " + polynomial);
+			//System.out.println("character: " + c + ",           is polynomial: " + polynomial);
 			
 			// multiplying the power of 33 by the character ASCII code
 			polynomial *= (int) c;
@@ -425,9 +424,21 @@ public class HashWordMap implements IWordMap, IHashMonitor
 			
 		}
 		
-		System.out.println(s.hashCode());
+		// the java language does not support unsigned integers so the result of this function might be negative integer
 		
-		System.out.println("polinomial accumulator for " + s + " is --------------------> " + polynomialAccumulator);
+		// if the polynomial accumulator result is over the integer absolute maximum value
+		// it will loop from the absolute minimum value to the absolute maximum value
+		
+		// The implementation of this table is array based so negative indexes are entirely forbidden
+		// to bypass this issue it is necessary to subtract the negative polynomial by
+		// java's integer absolute minimum since it is exactly half of the java integer data type and
+		// the integer absolute positive value is smaller by one, since it includes zero
+		
+		if ( polynomialAccumulator < 0 )
+		{
+			// subtracting the polynomial negative value by the integer absolute minimum
+			polynomialAccumulator -= Integer.MIN_VALUE;
+		}
 		
 		// returning the polynomial accumulator
 		return polynomialAccumulator;
@@ -573,6 +584,7 @@ public class HashWordMap implements IWordMap, IHashMonitor
 		
 		// it decreases the word counter
 		this.wordEntryCounter--;
+		
 	}
 	
 	
