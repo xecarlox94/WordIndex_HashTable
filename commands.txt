@@ -1,4 +1,5 @@
 
 addall
 
-search 10 algorithms
+
+remove l07

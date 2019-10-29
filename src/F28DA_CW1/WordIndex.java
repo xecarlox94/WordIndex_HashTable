@@ -267,21 +267,23 @@ public class WordIndex {
 
 						try {
 							
-							// removing word from word map
+							// removing position from word entry
 							wordPossMap.removePos(tempWordPos.getWord(), pos);
 							
 							
 							
-						} catch (WordException e) {
+						} catch (WordException e) 
+						{
+							// the removing position throws an error if the word entry does no exist
 							
-							// increments removed word counter
+							// increments removed word counter as the word has been removed
 							removedWordCounter++;
 						}
 						
 						
 					}
 					
-					System.out.println(removedWordCounter + " word positions removed");
+					System.out.println(removedWordCounter + " word entries were removed");
 
 					break;
 
