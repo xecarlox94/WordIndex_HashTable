@@ -291,10 +291,81 @@ public class WordIndex {
 					break;
 
 				case "overview":
-					// print overview
-					// ...
+					
+					// storing uniques
+					LinkedList<String> filenames = new LinkedList<String>();
+					// storing all word entry keys in a temporary string iterator
+					Iterator<String> wordKeys = wordPossMap.words();
 					
 					
+					// word entry counter
+					int wordsCounter = 0;
+					// positions counter
+					int positionsCounter = 0;
+					
+					
+					// looping through the iterator
+					while ( wordKeys.hasNext() )
+					{
+						// storing the word entry key string
+						String wordEntrykey = wordKeys.next();
+						
+						try 
+						{
+							// storing positions iterator per each word entry
+							Iterator<IPosition> positions = wordPossMap.positions(wordEntrykey);
+							
+
+							// incrementing the counter variable, if does not throw an error
+							wordsCounter++;
+							
+							// looping through the positions iterator
+							while ( positions.hasNext() ) 
+							{
+								// storing the next position in a temporary 
+								IPosition pos = positions.next();
+								
+								// position filename string
+								String posFileName = pos.getFileName();
+								
+								// incrementing the positions counter
+								positionsCounter++;
+								
+								// checks if file name string is in the file name string linked list 
+								boolean isFileNameInserted = false;
+								
+								// looping through the filenames string linked list
+								for( int k = 0; k < filenames.size(); k++ )
+								{
+									// this filesname index string is equal to the position filename
+									if ( filenames.get(k).equals(posFileName) )
+									{
+										// if string is already in, change inserted boolean to true
+										isFileNameInserted = true;
+									}
+								}
+								
+								// if the string is not in the linked list
+								if ( !isFileNameInserted )
+								{
+									// add the string to the linked list
+									filenames.add(posFileName);
+								}
+								
+							}
+							
+						} catch (WordException e)
+						{
+							// do nothing
+						}
+						
+					}
+					
+					
+					System.out.println("Overview:\r\n" + 
+							"  number of words: " + wordsCounter + "\r\n" + 
+							"  number of positions: " + positionsCounter + "\r\n" + 
+							"  number of files: " + filenames.size() );
 					
 					// Question
 					
