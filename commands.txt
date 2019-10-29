@@ -1,4 +1,4 @@
 
+addall
 
-add l11
-
+search 10 algorithms

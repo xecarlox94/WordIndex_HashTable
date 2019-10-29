@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -203,11 +204,8 @@ public class WordIndex {
 					// ...
 					try {
 						Iterator<IPosition> poss = wordPossMap.positions(word);
-						int i = 0;
+
 						while(poss.hasNext()) {
-							
-							// increments the number of existing word positions
-							i++;
 							
 							// stores a temporary word position variable
 							IPosition tempPosition = poss.next();
@@ -230,9 +228,6 @@ public class WordIndex {
 									// adds the current position to the respective file
 									wordPositionsFile[k].addPosition(tempPosition);
 									
-
-									System.out.println(tempPosition.getFileName());
-									
 									// breaks the inner for loop once the position was added to file
 									break;
 								}
@@ -241,7 +236,7 @@ public class WordIndex {
 						}
 						
 						// function that prints the results of the search, by taking the word positions per file and its amount
-						printSearchResults(wordPositionsFile, i, nb);
+						printSearchResults(wordPositionsFile, word, nb);
 						
 					} catch (WordException e) {
 						System.err.println("not found");
@@ -268,8 +263,8 @@ public class WordIndex {
 						
 						// casting word position variable into IPosition
 						IPosition pos = (IPosition) tempWordPos;
-						
-						// catch any error during the position removal
+
+
 						try {
 							
 							// removing word from word map
@@ -278,7 +273,6 @@ public class WordIndex {
 							
 							
 						} catch (WordException e) {
-
 							
 							// increments removed word counter
 							removedWordCounter++;
@@ -323,19 +317,78 @@ public class WordIndex {
 	
 	
 	// gets the word positions per file, sorts it and prints the amount of files specified and the word positions lines
-	private static void printSearchResults(WPositionsFile[] wordPositionsFile, int amountPositions, int numberFilesToPrint)
+	private static void printSearchResults(WPositionsFile[] wordPositionsFile, String word, int numberFilesToPrint)
 	{
-		System.out.println("Before sorting");
-		for(int i = 0; i < wordPositionsFile.length; i++) {
-			System.out.println( "File: " + wordPositionsFile[i].getFileName() + ",		word entries: " + wordPositionsFile[i].getAmountPositions() );
-		}
+		// sorts the array using the a comparator, sorting the positions descending by the amount of positions
 		Arrays.sort(wordPositionsFile, new ComparatorSortByPositionsAmount());
-		
 
-		System.out.println("After sorting");
-		for(int i = 0; i < wordPositionsFile.length; i++) {
-			System.out.println( "File: " + wordPositionsFile[i].getFileName() + ",		word entries: " + wordPositionsFile[i].getAmountPositions() );
+		// stores the string being used by the for loop
+		String forLoopString = "";
+		
+		// it counts how many files contain positions 
+		int filesWithPositionsCounter = 0;
+		
+		// it counts the amount of positions in total
+		int amountPositions = 0;
+		
+		// loops through the array of Word Position file objects
+		for( int k = 0; k < wordPositionsFile.length; k++)
+		{
+			// checks if file has positions
+			boolean doesFileHavePositions = wordPositionsFile[k].getAmountPositions() > 0;
+			
+			amountPositions += wordPositionsFile[k].getAmountPositions();
+			
+			// if file has positions
+			if( doesFileHavePositions ) 
+			{
+				// increase files with positions counter
+				filesWithPositionsCounter++;
+			}
+			
+			// it will print the files that have the most positions, within the range given by numberFilesToPrint
+			if( ( k < numberFilesToPrint ) && doesFileHavePositions )
+			{
+				if( wordPositionsFile[k].getAmountPositions() == 0 ) 
+				{
+					// prints this message informing that there is no no positions in this file
+					System.out.println("  No positions in file " + wordPositionsFile[k].getFileName() );
+					
+					// it continues to the next loop directly
+					continue;
+				}
+				
+				// builds the first line to be printed 
+				forLoopString += "  " + wordPositionsFile[k].getAmountPositions() + " in " 
+										+ wordPositionsFile[k].getFileName() + "\n   (lines ";
+
+				// stores the positions in this array
+				ArrayList<IPosition> tempArrPositions = wordPositionsFile[k].getPositions();
+				
+				// it loops through this positions array
+				for( int j = 0; j < tempArrPositions.size(); j++ )
+				{
+					// adding commas to string
+					if ( j > 0 ) forLoopString += ", ";
+					
+					// lines of each position to the string
+					forLoopString += tempArrPositions.get(j).getLine();
+				}
+				
+				// adds last parenthesis and new line character
+				forLoopString += " ) \n";
+			}
 		}
+		
+		// prints the overview message
+		String finalReportMessage = "The word \"" + word + "\" occurs " + amountPositions 
+									+ " times in " + filesWithPositionsCounter + " files:\n";
+		
+		// concatenates the overview message with the for loop message
+		finalReportMessage += forLoopString;
+		
+		// prints the final report
+		System.out.println(finalReportMessage);
 	}
 
 

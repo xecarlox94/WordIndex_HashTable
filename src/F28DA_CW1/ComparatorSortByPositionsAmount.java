@@ -6,7 +6,7 @@ import java.util.Comparator;
 
 /**
  * 
- * Comparator to sort word position per file by amount of position, in a descending order
+ * Comparator to sort word position per file by amount of positions, in a descending order
  *
  */
 
