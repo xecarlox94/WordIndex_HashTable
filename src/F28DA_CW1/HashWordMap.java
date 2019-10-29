@@ -345,6 +345,16 @@ public class HashWordMap implements IWordMap, IHashMonitor
 			// store the IPosition array list values
 			ArrayList<IPosition> arrListPos = wordEntry.getValue();
 			
+			// if list of arrays is empty
+			if ( arrListPos.size() == 0 )
+			{
+				// removes the word
+				this.removeWord(word);
+				
+				// throws error saying that there is no position in this word entry
+				throw new WordException("No word positions found");
+			}
+			
 			// return an iterator
 			return arrListPos.iterator();
 		}

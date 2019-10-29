@@ -261,7 +261,8 @@ public class WordIndex {
 					int removedWordCounter = 0;
 
 					// reads the whole text file by looping under the condition of having a next word
-					while (wrdReader.hasNextWord()) {
+					while ( wrdReader.hasNextWord() ) 
+					{
 						
 						// Stores the word in a temporary variable
 						WordPosition tempWordPos = wrdReader.nextWord();
@@ -439,7 +440,7 @@ public class WordIndex {
 				
 				// builds the first line to be printed 
 				forLoopString += "  " + wordPositionsFile[k].getAmountPositions() + " in " 
-										+ wordPositionsFile[k].getFileName() + "\n   (lines ";
+										+ wordPositionsFile[k].getFileName() + "\n   ( lines ";
 
 				// stores the positions in this array
 				ArrayList<IPosition> tempArrPositions = wordPositionsFile[k].getPositions();

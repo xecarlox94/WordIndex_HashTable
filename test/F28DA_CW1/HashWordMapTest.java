@@ -8,6 +8,21 @@ public class HashWordMapTest {
 
 	// Add your own tests, for example to test the method hashCode from HashWordMap
 	
+	//	- creates a new word entry with many positions
+	//	- returns the number of items
+	//	- add a new word position to a existent word entry
+	//	- add many word entries and remove all of them
+	//
+	//	- removes word entries
+	//	- removes word positions
+	//	- removes word entries if all positions are removed
+	//
+	//	- throws error if looking for positions of a non existent word entry
+	//	- throws error if removing a non existing word entry
+	//	
+	//	- if string hashcode is over is over the integer over the integer.max value, 
+	//	returns the module of int.max_value
+	
 	// ...
 	
 	@Test

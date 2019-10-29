@@ -1,10 +1,10 @@
-
 addall
 
 
-remove l00
+
+remove l07
 
 
-search 10 and
+search 3 algorithms
 
 overview
