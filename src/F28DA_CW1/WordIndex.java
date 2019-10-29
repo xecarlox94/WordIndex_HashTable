@@ -37,10 +37,10 @@ public class WordIndex {
 			
 			
 			// Linked List implementation of a word map
-			//wordPossMap = new ListWordMap();
+			wordPossMap = new ListWordMap();
 			
 			// hash table implementation of a word map
-			wordPossMap = new HashWordMap();
+			//wordPossMap = new HashWordMap();
 			
 			
 

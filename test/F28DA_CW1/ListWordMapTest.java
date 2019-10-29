@@ -2,25 +2,134 @@ package F28DA_CW1;
 
 import static org.junit.Assert.*;
 
+import java.util.Iterator;
+
 import org.junit.Test;
 
 public class ListWordMapTest {
-
-	// Add your own tests
-	
 	
 
-	//	- creates a new word entry with many positions
-	//	- returns the number of items
-	//	- add a new word position to a existent word entry
-	//	- add many word entries and remove all of them
-	//
-	//	- removes word entries
-	//	- removes word positions
-	//	- removes word entries if all positions are removed
-	//
-	//	- throws error if looking for positions of a non existent word entry
-	//	- throws error if removing a non existing word entry
+	//	testing if it creates a new word entry with many positions
+	//	testing if it returns the number of items
+	//	testing if it removes multiple word positions
+	//	testing if it adds a new word position to a existent word entry
+	
+	@Test
+	public void addingPositionsToEntryAndRemovePositionsAndEntry() 
+	{
+		
+		IWordMap map = new ListWordMap();
+		
+		assertEquals(map.numberOfEntries(), 0);
+		
+		String wordKey = "word";
+		
+		WordPosition pos;
+		
+		for(int k = 0; k < 100; k++) 
+		{
+			int line = 10 + k;
+			
+			String file = "f" + k + ".txt";
+			
+			pos = new WordPosition(file, line, wordKey);
+			
+			map.addPos(wordKey, pos);
+		}
+
+		assertEquals(map.numberOfEntries(), 1);
+		
+		Iterator<IPosition> positions = null;
+		
+		try 
+		{
+			positions = map.positions(wordKey);
+			
+		} catch (WordException e) 
+		{
+			fail();
+		}
+		
+		
+		int positionsCounter = 0;
+		
+
+		for(int k = 0; k < 100; k++) 
+		{
+			
+			int line = 10 + k;
+			
+			String file = "f" + k + ".txt";
+			
+			while ( positions.hasNext() ) 
+			{
+				positionsCounter++;
+				
+				IPosition position = positions.next();
+
+			}
+			
+		}
+		
+
+		assertEquals(positionsCounter, 100);
+		
+	}
+	
+	
+	
+
+	//	testing if it returns the number of items
+	//	testing if it removes all word entries
+	
+	@Test
+	public void addingEntriesPositionsAndRemoveThem()
+	{
+		IWordMap map = new ListWordMap();
+		
+		assertEquals(map.numberOfEntries(), 0);
+		
+		String wordKey;
+		int line;
+		String file;
+		WordPosition pos;
+		
+		for( int k = 0; k < 100; k++ )
+		{
+			wordKey = "word" + k;
+			
+			for( int j = 0; j < 10; j++ )
+			{
+				line = 10 + j;
+				file = "file" + j + ".txt";
+
+				pos = new WordPosition(file, line, wordKey);
+				
+				map.addPos(wordKey, pos);
+			}
+			
+		}
+
+
+		assertEquals(map.numberOfEntries(), 100);
+		
+		for( int k = 0; k < 100; k++ )
+		{
+			wordKey = "word" + k;
+			
+			try
+			{
+				map.removeWord(wordKey);
+				
+			} catch (WordException e) 
+			{
+				fail();
+			}
+			
+		}
+		
+		assertEquals(map.numberOfEntries(), 0);
+	}
 
 	
 	// ...

@@ -112,11 +112,5 @@ public class WordEntry implements Entry<String, ArrayList<IPosition>> {
 	{
 		return this.positions.size();
 	}
-	
-	// returns if the positions array list is empty
-	public boolean isWordPositionsEmpty()
-	{
-		return this.positions.isEmpty();
-	}
 
 }

@@ -6,8 +6,12 @@ import java.util.LinkedList;
 public class ListWordMap implements IWordMap
 {
 	// Java linked list which will store Word Entries
-	private LinkedList<WordEntry> list = new LinkedList<WordEntry>();
+	private LinkedList<WordEntry> list;
 
+	public ListWordMap()
+	{
+		this.list = new LinkedList<WordEntry>();
+	}
 	
 	@Override
 	public void addPos(String word, IPosition pos)
@@ -88,7 +92,7 @@ public class ListWordMap implements IWordMap
 			{
 				
 				// if word has the positions array list empty
-				if(list.get(i).isWordPositionsEmpty())
+				if(list.get(i).getValue().isEmpty())
 				{
 					
 					// remove word from map
