@@ -12,7 +12,6 @@ public class ListWordMap implements IWordMap
 	@Override
 	public void addPos(String word, IPosition pos)
 	{
-		System.out.println("Running");
 		// checks if entry was found
 		boolean entryFound = false;
 		
@@ -78,9 +77,7 @@ public class ListWordMap implements IWordMap
 	@Override
 	public void removePos(String word, IPosition pos) throws WordException
 	{
-		// checks if the word position entry was removed
-		boolean wasPosRemoved = false;
-		
+		// looping through the list
 		for (int i = 0; i < this.list.size(); i++)
 		{
 			// Instantiates a temporary string containing an index element's word for comparison
@@ -89,8 +86,6 @@ public class ListWordMap implements IWordMap
 			// compares the temporary string to test if it matches the given word string
 			if(tempWord.equals(word))
 			{
-				// removes word position from word entry
-				wasPosRemoved = list.get(i).removePosition(pos);
 				
 				// if word has the positions array list empty
 				if(list.get(i).isWordPositionsEmpty())
@@ -98,17 +93,20 @@ public class ListWordMap implements IWordMap
 					
 					// remove word from map
 					this.removeWord(tempWord);
-					
-					wasPosRemoved = true;
+
+					// throw word exception saying that no word entry was found
+					throw new WordException("No word entry found");
 				}
+				
+
+				// removes word position from word entry
+				list.get(i).removePosition(pos);
 				
 				// Finishes the loop execution
 				break;
 			}
 		}
-		
-		// if no entry was removed, then throw the word exception stating that no word position entry was removed
-		if(!wasPosRemoved) throw new WordException("No word position was found for word: " + word);
+
 	}
 
 	@Override

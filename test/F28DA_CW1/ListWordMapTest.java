@@ -8,6 +8,21 @@ public class ListWordMapTest {
 
 	// Add your own tests
 	
+	
+
+//	- creates a new word entry
+//	- add a new word position to a existent word entry
+//	
+//	- throws errors specified
+//	
+//	- removes word entries
+//	- removes word positions
+//	
+//	- removes word entries if all positions are removed
+//	
+//	- if string hashcode is over is over the integer over the integer.max value, 
+//	returns the module of int.max_value
+	
 	// ...
 
 	@Test

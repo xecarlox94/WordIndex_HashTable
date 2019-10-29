@@ -34,9 +34,12 @@ public class WordIndex {
 
 			// initialise map
 			IWordMap wordPossMap;
-			// Linked List implementation of the word map
+			
+			
+			// Linked List implementation of a word map
 			//wordPossMap = new ListWordMap();
 			
+			// hash table implementation of a word map
 			wordPossMap = new HashWordMap();
 			
 			
@@ -239,7 +242,7 @@ public class WordIndex {
 						printSearchResults(wordPositionsFile, word, nb);
 						
 					} catch (WordException e) {
-						System.err.println("not found");
+						System.err.println(e);
 					}
 					// ...
 					break;
@@ -275,7 +278,7 @@ public class WordIndex {
 							
 							
 						} catch (WordException e) 
-						{
+						{							
 							// the removing position throws an error if the word entry does no exist
 							
 							// increments removed word counter as the word has been removed

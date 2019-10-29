@@ -162,6 +162,7 @@ public class HashWordMapProvidedTest {
 					h.positions(word);
 					fail();
 				} catch (WordException e) {
+					assertTrue(true);
 				}
 			}
 		} catch (WordException e) {
