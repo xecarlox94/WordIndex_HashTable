@@ -246,8 +246,10 @@ public class WordIndex {
 
 				case "remove":
 					
+					String fileRemovedName = commandReader.nextWord().getWord().toUpperCase()+".txt";
+					
 					// loads the file to be removed
-					File textFileToRemove = new File(textFilesFolder, commandReader.nextWord().getWord().toUpperCase()+".txt");
+					File textFileToRemove = new File(textFilesFolder, fileRemovedName);
 					
 					// Initialises the file reader
 					WordTxtReader wrdReader = new WordTxtReader(textFileToRemove);
@@ -283,7 +285,8 @@ public class WordIndex {
 						
 					}
 					
-					System.out.println(removedWordCounter + " word entries were removed");
+					// final report message
+					System.out.println(removedWordCounter + " word entries were removed from file \"" + fileRemovedName.toLowerCase() + "\"");
 
 					break;
 
