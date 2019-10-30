@@ -9,6 +9,8 @@ import org.junit.Test;
 public class HashWordMapTest {
 
 
+	
+
 	//	testing if it creates a new word entry with many positions
 	//	testing if it returns the number of items
 	//	testing if it removes multiple word positions
@@ -57,15 +59,11 @@ public class HashWordMapTest {
 		for(int k = 0; k < 100; k++) 
 		{
 			
-			int line = 10 + k;
-			
-			String file = "f" + k + ".txt";
-			
 			while ( positions.hasNext() ) 
 			{
 				positionsCounter++;
-				
-				IPosition position = positions.next();
+
+				positions.next();
 
 			}
 			

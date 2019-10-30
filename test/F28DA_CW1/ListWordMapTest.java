@@ -57,15 +57,11 @@ public class ListWordMapTest {
 		for(int k = 0; k < 100; k++) 
 		{
 			
-			int line = 10 + k;
-			
-			String file = "f" + k + ".txt";
-			
 			while ( positions.hasNext() ) 
 			{
 				positionsCounter++;
-				
-				IPosition position = positions.next();
+
+				positions.next();
 
 			}
 			

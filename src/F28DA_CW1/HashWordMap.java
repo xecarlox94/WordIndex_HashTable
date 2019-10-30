@@ -407,9 +407,9 @@ public class HashWordMap implements IWordMap, IHashMonitor
 			char c = s.charAt(i);
 			
 			
-			// return a polynomial equal to the power (length - i - 1) of a prime number 33
-			// 33 is the next prime number after 31 (used in the Java language to create hash code)
-			int polynomial = (int) Math.pow(33, (s.length() - i - 1) );
+			// return a polynomial equal to the power (length - i - 1) of a prime number 37
+			// 37 is the next prime number after 31 (used in the Java language to create hash code)
+			int polynomial = (int) Math.pow(37, (s.length() - i - 1) );
 			
 			//System.out.println("character: " + c + ",           is polynomial: " + polynomial);
 			
