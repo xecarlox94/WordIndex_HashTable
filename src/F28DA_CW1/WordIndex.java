@@ -37,13 +37,13 @@ public class WordIndex {
 			
 			
 			// Linked List implementation of a word map
-			wordPossMap = new ListWordMap();
+			//wordPossMap = new ListWordMap();
 			
 			// hash table implementation of a word map
-			//wordPossMap = new HashWordMap();
+			wordPossMap = new HashWordMap();
 			
 			
-
+			
 			// reading the content of the command file
 			while(commandReader.hasNextWord()) {
 				// getting the next command

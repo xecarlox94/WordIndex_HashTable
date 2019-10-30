@@ -7,8 +7,28 @@ import java.util.Iterator;
 import org.junit.Test;
 
 public class HashWordMapTest {
-
-
+	
+	// testing the hash code
+	// testing if it is the same as java language
+	
+	@Test
+	public void testingHashCodeHashWordMap()
+	{
+		// instantiate hash word map
+		HashWordMap hashWordMap = new HashWordMap();
+		
+		
+		String string = "abc";
+		
+//		for(int i = 0; i < 10; i ++)
+//		{
+//			
+//		}
+		
+		
+		
+		assertEquals(string.hashCode(), hashWordMap.hashCode(string));
+	}
 	
 
 	//	testing if it creates a new word entry with many positions

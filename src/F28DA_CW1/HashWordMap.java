@@ -76,6 +76,9 @@ public class HashWordMap implements IWordMap, IHashMonitor
 		{
 			// if word entry was found, add a position to its value
 			this.table[index].addPosition(pos);
+
+			// increment number operations
+			this.operationsCounter++;
 		}
 
 	}
@@ -99,6 +102,9 @@ public class HashWordMap implements IWordMap, IHashMonitor
 			
 			// decrease word counter
 			this.wordEntryCounter--;
+
+			// increment number operations
+			this.operationsCounter++;
 		}
 	}
 
@@ -127,6 +133,10 @@ public class HashWordMap implements IWordMap, IHashMonitor
 				// decrease word entry counter
 				this.wordEntryCounter--;
 			}
+			
+
+			// increment number operations
+			this.operationsCounter++;
 		}
 		
 	}
@@ -222,8 +232,6 @@ public class HashWordMap implements IWordMap, IHashMonitor
 					// word entry counter is incremented by one 
 					this.wordEntryCounter++;
 					
-					// increment number operations
-					this.operationsCounter++;
 					
 					// while loop execution is stopped
 					break;
@@ -271,9 +279,8 @@ public class HashWordMap implements IWordMap, IHashMonitor
 
 			// modulus of index to keep the index within the the table array bounds
 			index = index % this.table.length;
+
 			
-			// increment number of probes
-			this.probesCounter++;
 			
 			// if index table is not empty and the key matches with the word
 			if( (this.table[index] != null) && ( this.table[index].getKey().equals(word) ))
@@ -286,8 +293,6 @@ public class HashWordMap implements IWordMap, IHashMonitor
 			// it means that all elements were searched
 			if( index == initialIndex )
 			{
-				// increment number operations
-				this.operationsCounter++;
 				
 				
 				// return -1 to inform that there is no entry in the array
@@ -296,9 +301,6 @@ public class HashWordMap implements IWordMap, IHashMonitor
 			}
 			
 		}
-		
-		// increment number operations
-		this.operationsCounter++;
 		
 		return index;
 	}
@@ -392,56 +394,124 @@ public class HashWordMap implements IWordMap, IHashMonitor
 		return ( numberEntries / tableLength );
 	}
 
+	
+	
+	
+	// It returns the polynomial accumulation to determine the string hash code
 	@Override
 	public int hashCode(String s)
 	{
-		// It returns the polynomial accumulation to determine the string hash code
+		// Prime number to hash the string
+		long hashPrimeNumber = 31;
 		
-		//System.out.println("STRING: " + s);
+		// this long integer accumulates the polynomial of each string character
+		long polynomialAccumulator = 0;
 		
-		// it accumulates the polynomial of each string character
-		int polynomialAccumulator = 0;
-		for(int i = 0; i < s.length() ; i++)
+		// gets the long integer of the string length
+		long stringLength = (long) s.length();
+		
+		
+		// looping through each
+		for(long i = 0; i < stringLength ; i++)
 		{
-			// Getting character at each position
-			char c = s.charAt(i);
+			// Getting character at position
+			char c = s.charAt( (int) i);
 			
 			
-			// return a polynomial equal to the power (length - i - 1) of a prime number 37
-			// 37 is the next prime number after 31 (used in the Java language to create hash code)
-			int polynomial = (int) Math.pow(37, (s.length() - i - 1) );
 			
-			//System.out.println("character: " + c + ",           is polynomial: " + polynomial);
+			// gets the ASCII code for character, and casting it to long integer
+			long asciiCodeCharacter = (long) c;
 			
-			// multiplying the power of 33 by the character ASCII code
-			polynomial *= (int) c;
+			// prime number's power
+			// needs to be the "inverse" of the current i
+			long power = stringLength - i - 1;
+			
+			// prime number's power necessary for character's polynomial
+			long primeNumberPower = this.powerOfNumber(hashPrimeNumber,  power);
+			
+			// each character's polynomial
+			long polynomial = asciiCodeCharacter * primeNumberPower;
 
-			// adding each character accumulator to the accumulator			
+			// adding each character accumulator to the accumulator
+
 			polynomialAccumulator += polynomial;
-
-
 			
 		}
 		
-		// the java language does not support unsigned integers so the result of this function might be negative integer
+		// it makes sure the number is always positive
+		polynomialAccumulator = this.ifNegativeReturnModuleLong(polynomialAccumulator);
 		
-		// if the polynomial accumulator result is over the integer absolute maximum value
+		// it stores the max integer value in a long integer variable
+		long maxIntLong = (long) java.lang.Integer.MAX_VALUE;
+		
+		// it returns the result of the polynomial accumulator module of the absolute max integer
+		long finalResultLong = polynomialAccumulator % maxIntLong; 
+		
+		// it casts the result polynomial accumulator
+		int finalResult = (int) finalResultLong;
+		
+		// returning the final integer value
+		return finalResult;
+	}
+	
+	
+	
+	// it returns a long integer of a number to the power of n
+	private long powerOfNumber(long number, long power)
+	{
+		// initiates the accumulator
+		long acumulator = 1;
+		
+		// it loops and powers the number to the power
+		for(long i = 0; i < power; i++)
+		{
+			// if the power is zero it returns the number itself
+			if( i == 0)
+			{
+				acumulator = 1 * number;
+			}
+			else
+			{
+				// it continuously muliplies the number
+				acumulator *= number;
+			}
+			
+		}
+		
+		// returns the numbers power
+		return acumulator;
+	}
+	
+	
+	public long ifNegativeReturnModuleLong(long longNumber)
+	{
+		// the java language does not support unsigned long integers
+		//so the result of this function might be negative  long integers
+		
+		// if the long integers is over the integer absolute maximum value
 		// it will loop from the absolute minimum value to the absolute maximum value
 		
 		// The implementation of this table is array based so negative indexes are entirely forbidden
-		// to bypass this issue it is necessary to subtract the negative polynomial by
-		// java's integer absolute minimum since it is exactly half of the java integer data type and
+		
+		// To bypass this issue it is necessary to do the module of the negative long integers by
+		// java's long integers absolute minimum since it is exactly half of the java long integers data type and
 		// the integer absolute positive value is smaller by one, since it includes zero
 		
-		if ( polynomialAccumulator < 0 )
-		{
-			// subtracting the polynomial negative value by the integer absolute minimum
-			polynomialAccumulator -= Integer.MIN_VALUE;
-		}
-		
-		// returning the polynomial accumulator
-		return polynomialAccumulator;
+				
+				// if the long number is negative
+				if ( longNumber < 0 )
+				{
+					// subtracting the polynomial negative value by the integer absolute minimum
+					longNumber = Long.MIN_VALUE % longNumber;
+					
+					// change the signal
+					longNumber = -longNumber;
+				}
+				
+				// returns always a positive long integer
+				return longNumber;
 	}
+	
 	
 	
 	// compression function, which compresses entries in the hash table
