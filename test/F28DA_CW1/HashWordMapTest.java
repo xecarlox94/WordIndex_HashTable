@@ -8,28 +8,6 @@ import org.junit.Test;
 
 public class HashWordMapTest {
 	
-	// testing the hash code
-	// testing if it is the same as java language
-	
-	@Test
-	public void testingHashCodeHashWordMap()
-	{
-		// instantiate hash word map
-		HashWordMap hashWordMap = new HashWordMap();
-		
-		
-		String string = "abc";
-		
-//		for(int i = 0; i < 10; i ++)
-//		{
-//			
-//		}
-		
-		
-		
-		assertEquals(string.hashCode(), hashWordMap.hashCode(string));
-	}
-	
 
 	//	testing if it creates a new word entry with many positions
 	//	testing if it returns the number of items
@@ -39,15 +17,20 @@ public class HashWordMapTest {
 	@Test
 	public void addingPositionsToEntryAndRemovePositionsAndEntry() 
 	{
-		
+		// initialises the map
 		IWordMap map = new HashWordMap();
 		
+		// asserts the initial amount of entries
 		assertEquals(map.numberOfEntries(), 0);
+
 		
+		// initialising the global variables
 		String wordKey = "word";
 		
 		WordPosition pos;
 		
+		
+		// adding multiple positions to word entry
 		for(int k = 0; k < 100; k++) 
 		{
 			int line = 10 + k;
@@ -59,16 +42,20 @@ public class HashWordMapTest {
 			map.addPos(wordKey, pos);
 		}
 
+		// asserts the current number of entries
 		assertEquals(map.numberOfEntries(), 1);
 		
+		// initialises a IPosition iterator variable
 		Iterator<IPosition> positions = null;
 		
 		try 
 		{
+			// Initialises word position
 			positions = map.positions(wordKey);
 			
 		} catch (WordException e) 
 		{
+			// fails if something unexpected happens
 			fail();
 		}
 		
@@ -89,7 +76,7 @@ public class HashWordMapTest {
 			
 		}
 		
-
+		// assert final number of entries, after removing all the entries
 		assertEquals(positionsCounter, 100);
 		
 	}
@@ -103,19 +90,25 @@ public class HashWordMapTest {
 	@Test
 	public void addingEntriesPositionsAndRemoveThem()
 	{
+		// initialises the map
 		IWordMap map = new HashWordMap();
 		
+		
+		// asserts the initial amount of entries
 		assertEquals(map.numberOfEntries(), 0);
 		
+		// initialising the global variables
 		String wordKey;
 		int line;
 		String file;
 		WordPosition pos;
 		
+		// it adds 100 word entries
 		for( int k = 0; k < 100; k++ )
 		{
 			wordKey = "word" + k;
 			
+			// it adds 10 positions to each word
 			for( int j = 0; j < 10; j++ )
 			{
 				line = 10 + j;
@@ -129,8 +122,10 @@ public class HashWordMapTest {
 		}
 
 
+		// asserting number of entries
 		assertEquals(map.numberOfEntries(), 100);
 		
+		// it removes all the words inserted before
 		for( int k = 0; k < 100; k++ )
 		{
 			wordKey = "word" + k;
@@ -141,11 +136,13 @@ public class HashWordMapTest {
 				
 			} catch (WordException e) 
 			{
+				// if something unexpected happens, fail
 				fail();
 			}
 			
 		}
 		
+		// assert final number of entries, after removing all the entries
 		assertEquals(map.numberOfEntries(), 0);
 	}
 	

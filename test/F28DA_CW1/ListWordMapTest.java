@@ -17,15 +17,20 @@ public class ListWordMapTest {
 	@Test
 	public void addingPositionsToEntryAndRemovePositionsAndEntry() 
 	{
-		
+		// initialises the map
 		IWordMap map = new ListWordMap();
 		
+		// asserts the initial amount of entries
 		assertEquals(map.numberOfEntries(), 0);
+
 		
+		// initialising the global variables
 		String wordKey = "word";
 		
 		WordPosition pos;
 		
+		
+		// adding multiple positions to word entry
 		for(int k = 0; k < 100; k++) 
 		{
 			int line = 10 + k;
@@ -37,16 +42,20 @@ public class ListWordMapTest {
 			map.addPos(wordKey, pos);
 		}
 
+		// asserts the current number of entries
 		assertEquals(map.numberOfEntries(), 1);
 		
+		// initialises a IPosition iterator variable
 		Iterator<IPosition> positions = null;
 		
 		try 
 		{
+			// Initialises word position
 			positions = map.positions(wordKey);
 			
 		} catch (WordException e) 
 		{
+			// fails if something unexpected happens
 			fail();
 		}
 		
@@ -67,7 +76,7 @@ public class ListWordMapTest {
 			
 		}
 		
-
+		// assert final number of entries, after removing all the entries
 		assertEquals(positionsCounter, 100);
 		
 	}
@@ -81,19 +90,25 @@ public class ListWordMapTest {
 	@Test
 	public void addingEntriesPositionsAndRemoveThem()
 	{
+		// initialises the map
 		IWordMap map = new ListWordMap();
 		
+		
+		// asserts the initial amount of entries
 		assertEquals(map.numberOfEntries(), 0);
 		
+		// initialising the global variables
 		String wordKey;
 		int line;
 		String file;
 		WordPosition pos;
 		
+		// it adds 100 word entries
 		for( int k = 0; k < 100; k++ )
 		{
 			wordKey = "word" + k;
 			
+			// it adds 10 positions to each word
 			for( int j = 0; j < 10; j++ )
 			{
 				line = 10 + j;
@@ -107,8 +122,10 @@ public class ListWordMapTest {
 		}
 
 
+		// asserting number of entries
 		assertEquals(map.numberOfEntries(), 100);
 		
+		// it removes all the words inserted before
 		for( int k = 0; k < 100; k++ )
 		{
 			wordKey = "word" + k;
@@ -119,11 +136,13 @@ public class ListWordMapTest {
 				
 			} catch (WordException e) 
 			{
+				// if something unexpected happens, fail
 				fail();
 			}
 			
 		}
 		
+		// assert final number of entries, after removing all the entries
 		assertEquals(map.numberOfEntries(), 0);
 	}
 
